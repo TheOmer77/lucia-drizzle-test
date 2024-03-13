@@ -14,17 +14,23 @@ import {
   FormMessage,
 } from '@/components/ui/Form';
 import { Input } from '@/components/ui/Input';
-import { signupFormSchema, type SignupFormValues } from './formSchema';
+import { signupFormSchema, type SignupFormValues } from '@/schemas/signup';
+import { registerUser } from '@/actions/auth';
+import { useTransition } from 'react';
 
 export const SignupForm = () => {
+  const [isPending, startTransition] = useTransition();
+
   const form = useForm<SignupFormValues>({
     resolver: zodResolver(signupFormSchema),
     defaultValues: { username: '', password: '', confirmPassword: '' },
   });
 
-  const onSubmit = (values: SignupFormValues) => {
-    // TODO: Do something with the form values
-    console.log(values);
+  const onSubmit = async (values: SignupFormValues) => {
+    startTransition(async () => {
+      const newUser = await registerUser(values);
+      console.log('New user created successfully 🎊\nUser details:', newUser);
+    });
   };
 
   return (
@@ -72,7 +78,9 @@ export const SignupForm = () => {
           />
         </CardContent>
         <CardFooter className='justify-end'>
-          <Button type='submit'>Sign up</Button>
+          <Button type='submit' disabled={isPending}>
+            Sign up
+          </Button>
         </CardFooter>
       </form>
     </Form>
