@@ -11,6 +11,7 @@
     "db:studio": "drizzle-kit studio --host 0.0.0.0"
   },
   "dependencies": {
+    "@hookform/resolvers": "^3.3.4",
     "@lucia-auth/adapter-drizzle": "^1.0.3",
     "@node-rs/argon2": "^1.8.0",
     "@node-rs/bcrypt": "^1.10.1",
@@ -26,8 +27,10 @@
     "postgres": "^3.4.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-hook-form": "^7.51.0",
     "tailwind-merge": "^2.2.1",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
+    "zod": "^3.22.4"
   },
   "devDependencies": {
     "@types/node": "^20.11.26",
