@@ -1,6 +1,7 @@
 'use client';
 
 import { useTransition } from 'react';
+import { redirect } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 
@@ -30,12 +31,8 @@ export const SignupForm = () => {
 
   const onSubmit = async (values: SignupFormValues) => {
     startTransition(async () => {
-      try {
-        const newUser = await registerUser(values);
-        displayToast(`Welcome, ${newUser.username}!`, {
-          description: `You've successfully signed up.`,
-        });
-      } catch (error) {
+      const { success, data, error } = await registerUser(values);
+      if (!success) {
         displayToast('Something went wrong', {
           description:
             error instanceof Error
@@ -43,7 +40,13 @@ export const SignupForm = () => {
               : 'Failed to create a new user.',
           variant: 'destructive',
         });
+        return;
       }
+
+      displayToast(`Welcome, ${data.username}!`, {
+        description: `You've successfully signed up.`,
+      });
+      redirect('/');
     });
   };
 

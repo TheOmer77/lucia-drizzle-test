@@ -14,21 +14,31 @@ export const registerUser = async (values: SignupFormValues) => {
 
   const hashedPassword = await new Argon2id().hash(password);
 
-  const [newUser] = await db
-    .insert(user)
-    .values({ username, password: hashedPassword })
-    .returning({ id: user.id, username: user.username });
+  try {
+    const [newUser] = await db
+      .insert(user)
+      .values({ username, password: hashedPassword })
+      .returning({ id: user.id, username: user.username });
 
-  const session = await lucia.createSession(newUser.id, {
-    expiresIn: 30 * 24 * 60 * 60,
-  });
-  const sessionCookie = lucia.createSessionCookie(session.id);
+    const session = await lucia.createSession(newUser.id, {
+      expiresIn: 30 * 24 * 60 * 60,
+    });
+    const sessionCookie = lucia.createSessionCookie(session.id);
 
-  cookies().set(
-    sessionCookie.name,
-    sessionCookie.value,
-    sessionCookie.attributes
-  );
+    cookies().set(
+      sessionCookie.name,
+      sessionCookie.value,
+      sessionCookie.attributes
+    );
 
-  return newUser;
+    return { success: true, data: newUser } satisfies {
+      success: true;
+      data: typeof newUser;
+    };
+  } catch (error) {
+    return { success: false, error } satisfies {
+      success: false;
+      error: typeof error;
+    };
+  }
 };
