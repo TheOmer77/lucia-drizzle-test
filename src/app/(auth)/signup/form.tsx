@@ -17,7 +17,7 @@ import {
 } from '@/components/ui/Form';
 import { Input } from '@/components/ui/Input';
 import { useToast } from '@/hooks/useToast';
-import { signupFormSchema, type SignupFormValues } from '@/schemas/signup';
+import { signupFormSchema, type SignupFormValues } from '@/schemas/auth';
 import { registerUser } from '@/actions/auth';
 
 export const SignupForm = () => {

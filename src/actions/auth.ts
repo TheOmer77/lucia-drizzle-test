@@ -3,7 +3,7 @@
 import { cookies } from 'next/headers';
 import { Argon2id } from 'oslo/password';
 
-import { signupFormSchema, type SignupFormValues } from '@/schemas/signup';
+import { signupFormSchema, type SignupFormValues } from '@/schemas/auth';
 import { db } from '@/db';
 import { user } from '@/db/schema';
 import { lucia } from '@/lib/auth';
