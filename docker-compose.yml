@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      dockerfile: Dockerfile
+      context: .
+    ports:
+      - 3000:3000
+      - 4983:4983 # Drizzle studio
+    volumes:
+      - .:/app
+      - /app/node_modules
+    environment:
+      - DB_URL=${DB_URL}
+
+  db:
+    image: postgres:16.2-alpine3.19
+    ports:
+      - '5432:5432'
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+
+volumes:
+  db-data:
