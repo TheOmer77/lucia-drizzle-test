@@ -31,16 +31,16 @@ export const LoginForm = () => {
 
   const onSubmit = async (values: LoginFormValues) => {
     startTransition(async () => {
-      const { success, data, error } = await loginUser(values);
-      if (!success) {
+      const res = await loginUser(values);
+      if (!res.success) {
         displayToast('Something went wrong', {
-          description: error || 'Failed to create a new user.',
+          description: res.error || 'Failed to create a new user.',
           variant: 'destructive',
         });
         return;
       }
 
-      displayToast(`Hi, ${data.username}!`);
+      displayToast(`Hi, ${res.data.username}!`);
       redirect('/');
     });
   };

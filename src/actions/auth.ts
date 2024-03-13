@@ -11,10 +11,27 @@ import {
   type SignupFormValues,
 } from '@/schemas/auth';
 import { db } from '@/db';
-import { user } from '@/db/schema';
+import { user, type User } from '@/db/schema';
 import { lucia } from '@/lib/auth';
 
-export const loginUser = async (values: LoginFormValues) => {
+const createUserSession = async (userId: User['id']) => {
+  const session = await lucia.createSession(userId, {
+    expiresIn: 30 * 24 * 60 * 60,
+  });
+  const sessionCookie = lucia.createSessionCookie(session.id);
+  cookies().set(
+    sessionCookie.name,
+    sessionCookie.value,
+    sessionCookie.attributes
+  );
+};
+
+export const loginUser = async (
+  values: LoginFormValues
+): Promise<
+  | { success: true; data: Pick<User, 'id' | 'username'> }
+  | { success: false; error: string }
+> => {
   loginFormSchema.parse(values);
 
   const [existingUser] = await db
@@ -24,41 +41,27 @@ export const loginUser = async (values: LoginFormValues) => {
     .limit(1);
 
   if (!existingUser || !existingUser.password)
-    return {
-      success: false,
-      error: 'Incorrect username or password.',
-    } satisfies { success: false; error: string };
+    return { success: false, error: 'Incorrect username or password.' };
   const isValidPassword = await new Argon2id().verify(
     existingUser.password,
     values.password
   );
   if (!isValidPassword)
-    return {
-      success: false,
-      error: 'Incorrect username or password.',
-    } satisfies { success: false; error: string };
+    return { success: false, error: 'Incorrect username or password.' };
 
-  const session = await lucia.createSession(existingUser.id, {
-    expiresIn: 30 * 24 * 60 * 60,
-  });
-  const sessionCookie = lucia.createSessionCookie(session.id);
-
-  cookies().set(
-    sessionCookie.name,
-    sessionCookie.value,
-    sessionCookie.attributes
-  );
-
+  await createUserSession(existingUser.id);
   return {
     success: true,
     data: { id: existingUser.id, username: existingUser.username },
-  } satisfies {
-    success: true;
-    data: { id: string; username: string };
   };
 };
 
-export const registerUser = async (values: SignupFormValues) => {
+export const registerUser = async (
+  values: SignupFormValues
+): Promise<
+  | { success: true; data: Pick<User, 'id' | 'username'> }
+  | { success: false; error: unknown }
+> => {
   signupFormSchema.parse(values);
   const { username, password } = values;
 
@@ -70,25 +73,9 @@ export const registerUser = async (values: SignupFormValues) => {
       .values({ username, password: hashedPassword })
       .returning({ id: user.id, username: user.username });
 
-    const session = await lucia.createSession(newUser.id, {
-      expiresIn: 30 * 24 * 60 * 60,
-    });
-    const sessionCookie = lucia.createSessionCookie(session.id);
-
-    cookies().set(
-      sessionCookie.name,
-      sessionCookie.value,
-      sessionCookie.attributes
-    );
-
-    return { success: true, data: newUser } satisfies {
-      success: true;
-      data: typeof newUser;
-    };
+    await createUserSession(newUser.id);
+    return { success: true, data: newUser };
   } catch (error) {
-    return { success: false, error } satisfies {
-      success: false;
-      error: typeof error;
-    };
+    return { success: false, error };
   }
 };

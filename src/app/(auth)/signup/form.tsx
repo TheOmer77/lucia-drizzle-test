@@ -31,19 +31,19 @@ export const SignupForm = () => {
 
   const onSubmit = async (values: SignupFormValues) => {
     startTransition(async () => {
-      const { success, data, error } = await registerUser(values);
-      if (!success) {
+      const res = await registerUser(values);
+      if (!res.success) {
         displayToast('Something went wrong', {
           description:
-            error instanceof Error
-              ? error.message
+            res.error instanceof Error
+              ? res.error.message
               : 'Failed to create a new user.',
           variant: 'destructive',
         });
         return;
       }
 
-      displayToast(`Welcome, ${data.username}!`, {
+      displayToast(`Welcome, ${res.data.username}!`, {
         description: `You've successfully signed up.`,
       });
       redirect('/');
