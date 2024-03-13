@@ -11,7 +11,8 @@ import {
 } from '@/schemas/auth';
 import { db } from '@/db';
 import { user, type User } from '@/db/schema';
-import { createUserSession } from '@/lib/auth';
+import { createUserSession, lucia, validateRequest } from '@/lib/auth';
+import { cookies } from 'next/headers';
 
 export const loginUser = async (
   values: LoginFormValues
@@ -65,4 +66,20 @@ export const registerUser = async (
   } catch (error) {
     return { success: false, error };
   }
+};
+
+export const logoutUser = async (): Promise<
+  { success: true } | { success: false; error: string }
+> => {
+  const { session } = await validateRequest();
+  if (!session) return { success: false, error: 'Unauthorized' };
+
+  await lucia.invalidateSession(session.id);
+  const sessionCookie = lucia.createBlankSessionCookie();
+  cookies().set(
+    sessionCookie.name,
+    sessionCookie.value,
+    sessionCookie.attributes
+  );
+  return { success: true };
 };

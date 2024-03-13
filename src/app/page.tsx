@@ -1,7 +1,9 @@
 import { redirect } from 'next/navigation';
 
+import { Card, CardContent, CardFooter } from '@/components/ui/Card';
+import { Button } from '@/components/ui/Button';
+import { logoutUser } from '@/actions/auth';
 import { validateRequest } from '@/lib/auth';
-import { Card } from '@/components/ui/Card';
 
 const Home = async () => {
   const { user } = await validateRequest();
@@ -16,14 +18,21 @@ tracking-tight'
         >
           Hello.
         </h1>
-        <Card className='grid grid-cols-[auto,1fr] gap-4 p-4'>
-          <h2 className='col-span-full font-semibold'>Your user details:</h2>
-          {Object.entries(user).map(([key, value]) => (
-            <>
-              <span className='text-sm font-medium'>{key}:</span>
-              <span className='text-muted-foreground text-sm'>{value}</span>
-            </>
-          ))}
+        <Card>
+          <CardContent className='grid grid-cols-[auto,1fr] gap-4 pt-6'>
+            <h2 className='col-span-full font-semibold'>Your user details:</h2>
+            {Object.entries(user).map(([key, value]) => (
+              <>
+                <span className='text-sm font-medium'>{key}:</span>
+                <span className='text-muted-foreground text-sm'>{value}</span>
+              </>
+            ))}
+          </CardContent>
+          <CardFooter>
+            <form action={logoutUser}>
+              <Button type='submit'>Logout</Button>
+            </form>
+          </CardFooter>
         </Card>
       </div>
     </div>
