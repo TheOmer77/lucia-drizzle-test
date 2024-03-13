@@ -1,24 +1,13 @@
-import { Button } from '@/components/ui/Button';
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/Card';
+import { SignupForm } from './form';
+import { Card, CardHeader, CardTitle } from '@/components/ui/Card';
 
 const SignupPage = () => (
-  <div className='grid min-h-dvh w-full place-items-center'>
-    <Card>
+  <div className='grid min-h-dvh w-full place-items-center p-4'>
+    <Card className='w-full max-w-md'>
       <CardHeader>
         <CardTitle>Sign up</CardTitle>
       </CardHeader>
-      <form>
-        <CardContent>TODO: Signup form</CardContent>
-        <CardFooter>
-          <Button type='submit'>Sign up</Button>
-        </CardFooter>
-      </form>
+      <SignupForm />
     </Card>
   </div>
 );
