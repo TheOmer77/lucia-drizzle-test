@@ -17,6 +17,7 @@ import {
 } from '@/components/ui/Form';
 import { Input } from '@/components/ui/Input';
 import { useToast } from '@/hooks/useToast';
+import { loginUser } from '@/actions/auth';
 import { loginFormSchema, type LoginFormValues } from '@/schemas/auth';
 
 export const LoginForm = () => {
@@ -30,26 +31,17 @@ export const LoginForm = () => {
 
   const onSubmit = async (values: LoginFormValues) => {
     startTransition(async () => {
-      const { success, data, error } = {
-        success: false,
-        error: new Error('Not implemented yet.'),
-        data: undefined,
-      };
+      const { success, data, error } = await loginUser(values);
       if (!success) {
         displayToast('Something went wrong', {
-          description:
-            error instanceof Error
-              ? error.message
-              : 'Failed to create a new user.',
+          description: error || 'Failed to create a new user.',
           variant: 'destructive',
         });
         return;
       }
 
-      /* displayToast(`Welcome, ${data.username}!`, {
-        description: `You've successfully signed up.`,
-      });
-      redirect('/'); */
+      displayToast(`Hi, ${data.username}!`);
+      redirect('/');
     });
   };
 
