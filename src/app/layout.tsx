@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 
 import '@/styles/index.css';
+import { Toaster } from '@/components/ui/Toast';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -13,7 +14,10 @@ export const metadata: Metadata = {
 
 const RootLayout = ({ children }: PropsWithChildren) => (
   <html lang='en'>
-    <body className={inter.className}>{children}</body>
+    <body className={inter.className}>
+      {children}
+      <Toaster />
+    </body>
   </html>
 );
 
