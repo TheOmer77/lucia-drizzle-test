@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "db:push": "drizzle-kit push:pg",
+    "db:studio": "drizzle-kit studio --host 0.0.0.0"
   },
   "dependencies": {
     "@lucia-auth/adapter-drizzle": "^1.0.3",
