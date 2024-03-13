@@ -1,6 +1,5 @@
 'use server';
 
-import { cookies } from 'next/headers';
 import { Argon2id } from 'oslo/password';
 import { eq } from 'drizzle-orm';
 
@@ -12,19 +11,7 @@ import {
 } from '@/schemas/auth';
 import { db } from '@/db';
 import { user, type User } from '@/db/schema';
-import { lucia } from '@/lib/auth';
-
-const createUserSession = async (userId: User['id']) => {
-  const session = await lucia.createSession(userId, {
-    expiresIn: 30 * 24 * 60 * 60,
-  });
-  const sessionCookie = lucia.createSessionCookie(session.id);
-  cookies().set(
-    sessionCookie.name,
-    sessionCookie.value,
-    sessionCookie.attributes
-  );
-};
+import { createUserSession } from '@/lib/auth';
 
 export const loginUser = async (
   values: LoginFormValues

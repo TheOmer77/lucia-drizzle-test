@@ -44,6 +44,18 @@ export const validateRequest = cache(async () => {
   return { user, session };
 });
 
+export const createUserSession = async (userId: string) => {
+  const session = await lucia.createSession(userId, {
+    expiresIn: 30 * 24 * 60 * 60,
+  });
+  const sessionCookie = lucia.createSessionCookie(session.id);
+  cookies().set(
+    sessionCookie.name,
+    sessionCookie.value,
+    sessionCookie.attributes
+  );
+};
+
 declare module 'lucia' {
   interface Register {
     Lucia: typeof lucia;
