@@ -1,5 +1,6 @@
 'use server';
 
+import { cookies } from 'next/headers';
 import { Argon2id } from 'oslo/password';
 import { eq } from 'drizzle-orm';
 
@@ -10,16 +11,12 @@ import {
   type SignupFormValues,
 } from '@/schemas/auth';
 import { db } from '@/db';
-import { user, type User } from '@/db/schema';
+import { user } from '@/db/schema';
 import { createUserSession, lucia, validateRequest } from '@/lib/auth';
-import { cookies } from 'next/headers';
 
 export const loginUser = async (
   values: LoginFormValues
-): Promise<
-  | { success: true; data: Pick<User, 'id' | 'email'> }
-  | { success: false; error: string }
-> => {
+): Promise<{ success: true } | { success: false; error: string }> => {
   loginFormSchema.parse(values);
 
   const [existingUser] = await db
@@ -38,18 +35,12 @@ export const loginUser = async (
     return { success: false, error: 'Incorrect email or password.' };
 
   await createUserSession(existingUser.id);
-  return {
-    success: true,
-    data: { id: existingUser.id, email: existingUser.email },
-  };
+  return { success: true };
 };
 
 export const registerUser = async (
   values: SignupFormValues
-): Promise<
-  | { success: true; data: Pick<User, 'id' | 'email'> }
-  | { success: false; error: unknown }
-> => {
+): Promise<{ success: true } | { success: false; error: unknown }> => {
   signupFormSchema.parse(values);
   const { email, password } = values;
 
@@ -59,10 +50,10 @@ export const registerUser = async (
     const [newUser] = await db
       .insert(user)
       .values({ email, password: hashedPassword })
-      .returning({ id: user.id, email: user.email });
+      .returning({ id: user.id });
 
     await createUserSession(newUser.id);
-    return { success: true, data: newUser };
+    return { success: true };
   } catch (error) {
     return { success: false, error };
   }
