@@ -15,3 +15,15 @@ export const signupFormSchema = z
     path: ['confirmPassword'],
   });
 export type SignupFormValues = z.infer<typeof signupFormSchema>;
+
+export const verifyFormSchema = z.object({
+  code: z
+    .string()
+    .length(8, {
+      message: 'Verification code should include exactly 8 digits.',
+    })
+    .regex(/^\d+$/, {
+      message: 'Verification code should only include digits.',
+    }),
+});
+export type VerifyFormValues = z.infer<typeof verifyFormSchema>;
