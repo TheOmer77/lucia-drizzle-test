@@ -34,8 +34,9 @@ export const LoginForm = () => {
     startTransition(async () => {
       const res = await loginUser(values);
       if (!res.success) {
-        displayToast('Something went wrong', {
-          description: res.error || 'Failed to create a new user.',
+        displayToast('Failed to log in', {
+          description:
+            res.error || 'Something went wrong while trying to log you in.',
           variant: 'destructive',
         });
         return;

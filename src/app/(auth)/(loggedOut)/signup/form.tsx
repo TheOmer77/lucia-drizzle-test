@@ -34,11 +34,11 @@ export const SignupForm = () => {
     startTransition(async () => {
       const res = await registerUser(values);
       if (!res.success) {
-        displayToast('Something went wrong', {
+        displayToast('Failed to sign up', {
           description:
             res.error instanceof Error
               ? res.error.message
-              : 'Failed to create a new user.',
+              : 'Something went wrong while trying to create your new user.',
           variant: 'destructive',
         });
         return;

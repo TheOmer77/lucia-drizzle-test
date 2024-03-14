@@ -48,7 +48,7 @@ export const VerifyForm = () => {
       }
 
       displayToast(`Welcome!`, {
-        description: `You've successfully signed up.`,
+        description: `You've successfully verified your account.`,
       });
       redirect('/');
     });
