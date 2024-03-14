@@ -9,6 +9,7 @@ import { validateRequest } from '@/lib/auth';
 const Home = async () => {
   const { user } = await validateRequest();
   if (!user) redirect('/login');
+  if (!user.emailVerified) redirect('/verify');
 
   return (
     <div className='grid min-h-dvh w-full place-items-center p-4'>

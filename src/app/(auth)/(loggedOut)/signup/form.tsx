@@ -43,10 +43,11 @@ export const SignupForm = () => {
         return;
       }
 
-      displayToast(`Welcome!`, {
+      // TODO: Only show this toast after verification
+      /* displayToast(`Welcome!`, {
         description: `You've successfully signed up.`,
-      });
-      redirect('/');
+      }); */
+      redirect('/verify');
     });
   };
 

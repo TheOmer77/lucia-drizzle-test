@@ -40,6 +40,7 @@ export const LoginForm = () => {
         return;
       }
 
+      if (!res.data.emailVerified) redirect('/verify');
       displayToast(`Welcome back!`);
       redirect('/');
     });

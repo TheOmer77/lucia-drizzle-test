@@ -11,7 +11,7 @@ import {
   type SignupFormValues,
 } from '@/schemas/auth';
 import { db } from '@/db';
-import { user } from '@/db/schema';
+import { user, type User } from '@/db/schema';
 import {
   createUserSession,
   generateVerificationCode,
@@ -21,11 +21,18 @@ import {
 
 export const loginUser = async (
   values: LoginFormValues
-): Promise<{ success: true } | { success: false; error: string }> => {
+): Promise<
+  | { success: true; data: Pick<User, 'emailVerified'> }
+  | { success: false; error: string }
+> => {
   loginFormSchema.parse(values);
 
   const [existingUser] = await db
-    .select()
+    .select({
+      id: user.id,
+      password: user.password,
+      emailVerified: user.emailVerified,
+    })
     .from(user)
     .where(eq(user.email, values.email))
     .limit(1);
@@ -40,7 +47,7 @@ export const loginUser = async (
     return { success: false, error: 'Incorrect email or password.' };
 
   await createUserSession(existingUser.id);
-  return { success: true };
+  return { success: true, data: { emailVerified: existingUser.emailVerified } };
 };
 
 export const registerUser = async (
