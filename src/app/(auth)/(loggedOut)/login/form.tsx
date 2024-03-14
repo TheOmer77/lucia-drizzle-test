@@ -1,6 +1,7 @@
 'use client';
 
 import { useTransition } from 'react';
+import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
@@ -76,6 +77,12 @@ export const LoginForm = () => {
               </FormItem>
             )}
           />
+          <div className='text-sm text-muted-foreground'>
+            Don&apos;t have an account?{' '}
+            <Button asChild variant='link' className='h-auto p-0'>
+              <Link href='/signup'>Sign up</Link>
+            </Button>
+          </div>
         </CardContent>
         <CardFooter className='justify-end'>
           <Button type='submit' disabled={isPending}>
