@@ -100,6 +100,20 @@ export const verifyUser = async (
   return { success: true };
 };
 
+export const resendVerificationCode = async (): Promise<
+  { success: true } | { success: false; error: string }
+> => {
+  const { user: currentUser } = await validateRequest();
+  if (!currentUser) return { success: false, error: 'Unauthorized' };
+
+  const verificationCode = await generateVerificationCode(currentUser.id);
+  // TODO: Send verification code by email
+  console.log(
+    `TEMPORARY LOG: Use code '${verificationCode}' as the verification code for ${currentUser.email}.`
+  );
+  return { success: true };
+};
+
 export const logoutUser = async (): Promise<
   { success: true } | { success: false; error: string }
 > => {

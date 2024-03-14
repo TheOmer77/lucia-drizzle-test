@@ -22,7 +22,7 @@ import {
 } from '@/components/ui/OTPInput';
 import { useToast } from '@/hooks/useToast';
 import { verifyFormSchema, type VerifyFormValues } from '@/schemas/auth';
-import { verifyUser } from '@/actions/auth';
+import { resendVerificationCode, verifyUser } from '@/actions/auth';
 
 export const VerifyForm = () => {
   const { displayToast } = useToast();
@@ -33,7 +33,7 @@ export const VerifyForm = () => {
     defaultValues: { code: '' },
   });
 
-  const handleSubmit = async (values: VerifyFormValues) => {
+  const handleSubmit = (values: VerifyFormValues) => {
     startTransition(async () => {
       const res = await verifyUser(values.code);
       if (!res.success) {
@@ -51,6 +51,25 @@ export const VerifyForm = () => {
         description: `You've successfully signed up.`,
       });
       redirect('/');
+    });
+  };
+
+  const handleResend = async () => {
+    startTransition(async () => {
+      const res = await resendVerificationCode();
+      if (!res.success) {
+        displayToast('Failed to resend code', {
+          description:
+            res.error ||
+            'Something went wrong while trying to resend the code.',
+          variant: 'destructive',
+        });
+        form.reset();
+        return;
+      }
+
+      form.clearErrors();
+      displayToast('New verification code sent.');
     });
   };
 
@@ -88,6 +107,7 @@ export const VerifyForm = () => {
               className='h-auto p-0'
               type='button'
               disabled={isPending}
+              onClick={handleResend}
             >
               Resend
             </Button>
