@@ -12,7 +12,12 @@ import {
 } from '@/schemas/auth';
 import { db } from '@/db';
 import { user } from '@/db/schema';
-import { createUserSession, lucia, validateRequest } from '@/lib/auth';
+import {
+  createUserSession,
+  generateVerificationCode,
+  lucia,
+  validateRequest,
+} from '@/lib/auth';
 
 export const loginUser = async (
   values: LoginFormValues
@@ -52,7 +57,13 @@ export const registerUser = async (
       .values({ email, password: hashedPassword })
       .returning({ id: user.id });
 
-    await createUserSession(newUser.id);
+    const verificationCode = await generateVerificationCode(newUser.id);
+    // TODO: Send verification code by email
+    console.log(
+      `TEMPORARY LOG: Use code '${verificationCode}' as the verification code for ${values.email}.`
+    );
+
+    createUserSession(newUser.id);
     return { success: true };
   } catch (error) {
     return { success: false, error };

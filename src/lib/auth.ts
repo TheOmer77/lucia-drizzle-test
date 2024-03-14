@@ -2,9 +2,12 @@ import { cache } from 'react';
 import { cookies } from 'next/headers';
 import { Lucia } from 'lucia';
 import { DrizzlePostgreSQLAdapter } from '@lucia-auth/adapter-drizzle';
+import { TimeSpan, createDate } from 'oslo';
+import { alphabet, generateRandomString } from 'oslo/crypto';
+import { eq } from 'drizzle-orm';
 
 import { db } from '@/db';
-import { session, user } from '@/db/schema';
+import { emailVerification, session, user } from '@/db/schema';
 
 const adapter = new DrizzlePostgreSQLAdapter(db, session, user);
 
@@ -17,6 +20,7 @@ export const lucia = new Lucia(adapter, {
   },
   getUserAttributes: attributes => ({
     email: attributes.email,
+    emailVerified: attributes.emailVerified,
   }),
 });
 
@@ -25,6 +29,7 @@ declare module 'lucia' {
     Lucia: typeof lucia;
     DatabaseUserAttributes: {
       email: string;
+      emailVerified: boolean;
     };
   }
 }
@@ -66,4 +71,17 @@ export const createUserSession = async (userId: string) => {
     sessionCookie.value,
     sessionCookie.attributes
   );
+};
+
+export const generateVerificationCode = async (userId: string) => {
+  await db
+    .delete(emailVerification)
+    .where(eq(emailVerification.userId, userId));
+  const code = generateRandomString(8, alphabet('0-9'));
+  await db.insert(emailVerification).values({
+    userId,
+    code,
+    expiresAt: createDate(new TimeSpan(15, 'm')), // 15 minutes
+  });
+  return code;
 };
