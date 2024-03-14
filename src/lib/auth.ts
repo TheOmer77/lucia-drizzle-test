@@ -15,7 +15,19 @@ export const lucia = new Lucia(adapter, {
     expires: false,
     attributes: { secure: process.env.NODE_ENV === 'production' },
   },
+  getUserAttributes: attributes => ({
+    email: attributes.email,
+  }),
 });
+
+declare module 'lucia' {
+  interface Register {
+    Lucia: typeof lucia;
+    DatabaseUserAttributes: {
+      email: string;
+    };
+  }
+}
 
 export const validateRequest = cache(async () => {
   const sessionId = cookies().get(lucia.sessionCookieName)?.value ?? null;
@@ -55,9 +67,3 @@ export const createUserSession = async (userId: string) => {
     sessionCookie.attributes
   );
 };
-
-declare module 'lucia' {
-  interface Register {
-    Lucia: typeof lucia;
-  }
-}
