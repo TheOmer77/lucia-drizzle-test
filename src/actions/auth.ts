@@ -63,7 +63,7 @@ export const registerUser = async (
       `TEMPORARY LOG: Use code '${verificationCode}' as the verification code for ${values.email}.`
     );
 
-    createUserSession(newUser.id);
+    await createUserSession(newUser.id);
     return { success: true };
   } catch (error) {
     return { success: false, error };
