@@ -73,7 +73,7 @@ export const createUserSession = async (userId: string) => {
   );
 };
 
-export const generateVerificationCode = async (userId: string) => {
+export const createVerificationCode = async (userId: string) => {
   await db
     .delete(emailVerification)
     .where(eq(emailVerification.userId, userId));
@@ -83,6 +83,18 @@ export const generateVerificationCode = async (userId: string) => {
     code,
     expiresAt: createDate(new TimeSpan(15, 'm')), // 15 minutes
   });
+  return code;
+};
+
+export const updateVerificationCode = async (userId: string) => {
+  const code = generateRandomString(8, alphabet('0-9'));
+  await db
+    .update(emailVerification)
+    .set({
+      code,
+      expiresAt: createDate(new TimeSpan(15, 'm')), // 15 minutes
+    })
+    .where(eq(emailVerification.userId, userId));
   return code;
 };
 

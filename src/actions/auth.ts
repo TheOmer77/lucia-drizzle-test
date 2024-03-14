@@ -12,11 +12,12 @@ import {
   type SignupFormValues,
 } from '@/schemas/auth';
 import { db } from '@/db';
-import { user, type User } from '@/db/schema';
+import { emailVerification, user, type User } from '@/db/schema';
 import {
   createUserSession,
-  generateVerificationCode,
+  createVerificationCode,
   lucia,
+  updateVerificationCode,
   validateRequest,
   verifyVerificationCode,
 } from '@/lib/auth';
@@ -66,7 +67,7 @@ export const registerUser = async (
       .values({ email, password: hashedPassword })
       .returning({ id: user.id });
 
-    const verificationCode = await generateVerificationCode(newUser.id);
+    const verificationCode = await createVerificationCode(newUser.id);
     // TODO: Send verification code by email
     console.log(
       `TEMPORARY LOG: Use code '${verificationCode}' as the verification code for ${values.email}.`
@@ -108,10 +109,16 @@ export const resendVerificationCode = async (): Promise<
   if (currentUser.emailVerified)
     return { success: false, error: 'Email already verified.' };
 
-  const verificationCode = await generateVerificationCode(currentUser.id);
+  const [currentCode] = await db
+    .select()
+    .from(emailVerification)
+    .where(eq(emailVerification.userId, currentUser.id));
+  if (!currentCode)
+    return { success: false, error: 'No verification code to resend.' };
+  const newCode = await updateVerificationCode(currentUser.id);
   // TODO: Send verification code by email
   console.log(
-    `TEMPORARY LOG: Use code '${verificationCode}' as the verification code for ${currentUser.email}.`
+    `TEMPORARY LOG: Use code '${newCode}' as the verification code for ${currentUser.email}.`
   );
   return { success: true };
 };
