@@ -105,6 +105,8 @@ export const resendVerificationCode = async (): Promise<
 > => {
   const { user: currentUser } = await validateRequest();
   if (!currentUser) return { success: false, error: 'Unauthorized' };
+  if (currentUser.emailVerified)
+    return { success: false, error: 'Email already verified.' };
 
   const verificationCode = await generateVerificationCode(currentUser.id);
   // TODO: Send verification code by email
