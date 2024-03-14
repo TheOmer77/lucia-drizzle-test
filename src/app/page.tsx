@@ -1,3 +1,4 @@
+import { Fragment } from 'react';
 import { redirect } from 'next/navigation';
 
 import { Card, CardContent, CardFooter } from '@/components/ui/Card';
@@ -22,10 +23,10 @@ tracking-tight'
           <CardContent className='grid grid-cols-[auto,1fr] gap-4 pt-6'>
             <h2 className='col-span-full font-semibold'>Your user details:</h2>
             {Object.entries(user).map(([key, value]) => (
-              <>
+              <Fragment key={key}>
                 <span className='text-sm font-medium'>{key}:</span>
-                <span className='text-muted-foreground text-sm'>{value}</span>
-              </>
+                <span className='text-sm text-muted-foreground'>{`${value}`}</span>
+              </Fragment>
             ))}
           </CardContent>
           <CardFooter>
