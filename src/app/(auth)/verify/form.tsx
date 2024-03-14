@@ -34,7 +34,7 @@ export const VerifyForm = () => {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
-        <CardContent>
+        <CardContent className='space-y-4'>
           <FormField
             control={form.control}
             name='code'
@@ -58,6 +58,12 @@ export const VerifyForm = () => {
               </FormItem>
             )}
           />
+          <div className='text-sm text-muted-foreground'>
+            Didn&apos;t get a code?{' '}
+            <Button variant='link' className='h-auto p-0' type='button'>
+              Resend
+            </Button>
+          </div>
         </CardContent>
         <CardFooter className='justify-end'>
           <Button>Verify</Button>
