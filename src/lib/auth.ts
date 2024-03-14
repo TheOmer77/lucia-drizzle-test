@@ -2,7 +2,7 @@ import { cache } from 'react';
 import { cookies } from 'next/headers';
 import { Lucia } from 'lucia';
 import { DrizzlePostgreSQLAdapter } from '@lucia-auth/adapter-drizzle';
-import { TimeSpan, createDate } from 'oslo';
+import { TimeSpan, createDate, isWithinExpirationDate } from 'oslo';
 import { alphabet, generateRandomString } from 'oslo/crypto';
 import { eq } from 'drizzle-orm';
 
@@ -85,3 +85,19 @@ export const generateVerificationCode = async (userId: string) => {
   });
   return code;
 };
+
+export const verifyVerificationCode = async (userId: string, code: string) =>
+  await db.transaction(async tx => {
+    const [dbCode] = await tx
+      .select()
+      .from(emailVerification)
+      .where(eq(emailVerification.userId, userId));
+
+    if (!dbCode || dbCode.code !== code) return false;
+    await tx
+      .delete(emailVerification)
+      .where(eq(emailVerification.id, dbCode.id));
+
+    if (!isWithinExpirationDate(dbCode.expiresAt)) return false;
+    return true;
+  });

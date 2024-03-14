@@ -7,6 +7,7 @@ import { eq } from 'drizzle-orm';
 import {
   loginFormSchema,
   signupFormSchema,
+  verifyFormSchema,
   type LoginFormValues,
   type SignupFormValues,
 } from '@/schemas/auth';
@@ -17,6 +18,7 @@ import {
   generateVerificationCode,
   lucia,
   validateRequest,
+  verifyVerificationCode,
 } from '@/lib/auth';
 
 export const loginUser = async (
@@ -75,6 +77,27 @@ export const registerUser = async (
   } catch (error) {
     return { success: false, error };
   }
+};
+
+export const verifyUser = async (
+  code: string
+): Promise<{ success: true } | { success: false; error: string }> => {
+  const { user: currentUser } = await validateRequest();
+  if (!currentUser) return { success: false, error: 'Unauthorized' };
+
+  verifyFormSchema.parse({ code });
+
+  const isValidCode = await verifyVerificationCode(currentUser.id, code);
+  if (!isValidCode)
+    return { success: false, error: 'Code is invalid or expired.' };
+
+  await lucia.invalidateUserSessions(currentUser.id);
+  await db
+    .update(user)
+    .set({ emailVerified: true })
+    .where(eq(user.id, currentUser.id));
+  await createUserSession(currentUser.id);
+  return { success: true };
 };
 
 export const logoutUser = async (): Promise<

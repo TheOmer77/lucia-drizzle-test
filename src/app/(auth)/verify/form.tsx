@@ -1,5 +1,7 @@
 'use client';
 
+import { useTransition } from 'react';
+import { redirect } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { REGEXP_ONLY_DIGITS } from 'input-otp';
@@ -18,22 +20,43 @@ import {
   OTPInputGroup,
   OTPInputSlot,
 } from '@/components/ui/OTPInput';
+import { useToast } from '@/hooks/useToast';
 import { verifyFormSchema, type VerifyFormValues } from '@/schemas/auth';
+import { verifyUser } from '@/actions/auth';
 
 export const VerifyForm = () => {
+  const { displayToast } = useToast();
+  const [isPending, startTransition] = useTransition();
+
   const form = useForm<VerifyFormValues>({
     resolver: zodResolver(verifyFormSchema),
     defaultValues: { code: '' },
   });
 
-  const onSubmit = async (values: VerifyFormValues) => {
-    // TODO: Verify that code is correct and not expired
-    console.error('Not implemented yet.\nEntered code:', values.code);
+  const handleSubmit = async (values: VerifyFormValues) => {
+    startTransition(async () => {
+      const res = await verifyUser(values.code);
+      if (!res.success) {
+        displayToast('Failed to verify code', {
+          description:
+            res.error ||
+            'Something went wrong while trying to verify the code.',
+          variant: 'destructive',
+        });
+        form.reset();
+        return;
+      }
+
+      displayToast(`Welcome!`, {
+        description: `You've successfully signed up.`,
+      });
+      redirect('/');
+    });
   };
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)}>
+      <form onSubmit={form.handleSubmit(handleSubmit)}>
         <CardContent className='space-y-4'>
           <FormField
             control={form.control}
@@ -60,13 +83,20 @@ export const VerifyForm = () => {
           />
           <div className='text-sm text-muted-foreground'>
             Didn&apos;t get a code?{' '}
-            <Button variant='link' className='h-auto p-0' type='button'>
+            <Button
+              variant='link'
+              className='h-auto p-0'
+              type='button'
+              disabled={isPending}
+            >
               Resend
             </Button>
           </div>
         </CardContent>
         <CardFooter className='justify-end'>
-          <Button>Verify</Button>
+          <Button type='submit' disabled={isPending}>
+            Verify
+          </Button>
         </CardFooter>
       </form>
     </Form>
