@@ -26,7 +26,7 @@ export const LoginForm = () => {
 
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginFormSchema),
-    defaultValues: { username: '', password: '' },
+    defaultValues: { email: '', password: '' },
   });
 
   const onSubmit = async (values: LoginFormValues) => {
@@ -40,7 +40,7 @@ export const LoginForm = () => {
         return;
       }
 
-      displayToast(`Hi, ${res.data.username}!`);
+      displayToast(`Welcome back!`);
       redirect('/');
     });
   };
@@ -51,12 +51,12 @@ export const LoginForm = () => {
         <CardContent className='space-y-4'>
           <FormField
             control={form.control}
-            name='username'
+            name='email'
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Username</FormLabel>
+                <FormLabel>Email</FormLabel>
                 <FormControl>
-                  <Input {...field} />
+                  <Input {...field} type='email' />
                 </FormControl>
                 <FormMessage />
               </FormItem>
