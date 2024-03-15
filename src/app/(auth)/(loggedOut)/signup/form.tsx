@@ -36,9 +36,8 @@ export const SignupForm = () => {
       if (!res.success) {
         displayToast('Failed to sign up', {
           description:
-            res.error instanceof Error
-              ? res.error.message
-              : 'Something went wrong while trying to create your new user.',
+            res.error ||
+            'Something went wrong while trying to create your new user.',
           variant: 'destructive',
         });
         return;

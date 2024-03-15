@@ -2,7 +2,7 @@
 
 import { cookies } from 'next/headers';
 import { Argon2id } from 'oslo/password';
-import { eq } from 'drizzle-orm';
+import { eq, sql } from 'drizzle-orm';
 
 import {
   loginFormSchema,
@@ -54,9 +54,18 @@ export const loginUser = async (
 
 export const registerUser = async (
   values: SignupFormValues
-): Promise<{ success: true } | { success: false; error: unknown }> => {
+): Promise<{ success: true } | { success: false; error: string }> => {
   signupFormSchema.parse(values);
   const { email, password } = values;
+
+  const userExists = (
+    await db
+      .select({ value: sql<boolean>`COUNT(1) > 0` })
+      .from(user)
+      .where(eq(user.email, email))
+  )[0]?.value;
+  if (userExists)
+    return { success: false, error: 'A user with this email already exists.' };
 
   const hashedPassword = await new Argon2id().hash(password);
 
@@ -75,7 +84,14 @@ export const registerUser = async (
     await createUserSession(newUser.id);
     return { success: true };
   } catch (error) {
-    return { success: false, error };
+    return {
+      success: false,
+      error:
+        error instanceof Error
+          ? error.message
+          : // TEMPORARY!
+            'Something went wrong while trying to create your new user.',
+    };
   }
 };
 
