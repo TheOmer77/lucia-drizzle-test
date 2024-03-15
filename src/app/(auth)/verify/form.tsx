@@ -1,9 +1,10 @@
 'use client';
 
-import { useTransition } from 'react';
+import { useEffect, useTransition } from 'react';
 import { redirect } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useCountdown } from 'usehooks-ts';
 import { REGEXP_ONLY_DIGITS } from 'input-otp';
 
 import { Button } from '@/components/ui/Button';
@@ -26,6 +27,8 @@ import { resendVerificationCode, verifyUser } from '@/actions/auth';
 
 export const VerifyForm = () => {
   const { displayToast } = useToast();
+  const [resendCount, { startCountdown, stopCountdown, resetCountdown }] =
+    useCountdown({ countStart: 60 });
   const [isPending, startTransition] = useTransition();
 
   const form = useForm<VerifyFormValues>({
@@ -47,6 +50,7 @@ export const VerifyForm = () => {
         return;
       }
 
+      stopCountdown();
       displayToast(`Welcome!`, {
         description: `You've successfully verified your account.`,
       });
@@ -68,10 +72,16 @@ export const VerifyForm = () => {
         return;
       }
 
+      resetCountdown();
+      startCountdown();
       form.clearErrors();
       displayToast('New verification code sent.');
     });
   };
+
+  useEffect(() => {
+    startCountdown();
+  }, [startCountdown]);
 
   return (
     <Form {...form}>
@@ -102,15 +112,19 @@ export const VerifyForm = () => {
           />
           <div className='text-sm text-muted-foreground'>
             Didn&apos;t get a code?{' '}
-            <Button
-              variant='link'
-              className='h-auto p-0'
-              type='button'
-              disabled={isPending}
-              onClick={handleResend}
-            >
-              Resend
-            </Button>
+            {resendCount > 0 ? (
+              `Try resending it in ${resendCount} ${resendCount === 1 ? 'second' : 'seconds'}.`
+            ) : (
+              <Button
+                variant='link'
+                className='h-auto p-0'
+                type='button'
+                disabled={isPending}
+                onClick={handleResend}
+              >
+                Resend
+              </Button>
+            )}
           </div>
         </CardContent>
         <CardFooter className='justify-end'>

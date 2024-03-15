@@ -17,7 +17,6 @@ import {
   createUserSession,
   createVerificationCode,
   lucia,
-  updateVerificationCode,
   validateRequest,
   verifyVerificationCode,
 } from '@/lib/auth';
@@ -115,7 +114,18 @@ export const resendVerificationCode = async (): Promise<
     .where(eq(emailVerification.userId, currentUser.id));
   if (!currentCode)
     return { success: false, error: 'No verification code to resend.' };
-  const newCode = await updateVerificationCode(currentUser.id);
+  const msSinceUpdated = new Date().valueOf() - currentCode.updatedAt.valueOf(),
+    secsSinceUpdated = Math.floor(msSinceUpdated / 1000);
+
+  if (msSinceUpdated < 60000)
+    return {
+      success: false,
+      error: `Please wait ${60 - secsSinceUpdated} ${
+        60 - secsSinceUpdated === 1 ? 'second' : 'seconds'
+      } before resending code.`,
+    };
+
+  const newCode = await createVerificationCode(currentUser.id, true);
   // TODO: Send verification code by email
   console.log(
     `TEMPORARY LOG: Use code '${newCode}' as the verification code for ${currentUser.email}.`
