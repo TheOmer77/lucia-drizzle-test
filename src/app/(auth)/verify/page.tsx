@@ -12,7 +12,7 @@ const VerifyPage = async () => {
   return (
     <>
       <CardHeader>
-        <CardTitle>Verify your account</CardTitle>
+        <CardTitle>Just to be safe...</CardTitle>
         <CardDescription>
           We&apos;ve sent a verification code to your email - please enter it
           below.

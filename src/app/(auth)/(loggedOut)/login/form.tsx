@@ -34,9 +34,9 @@ export const LoginForm = () => {
     startTransition(async () => {
       const res = await loginUser(values);
       if (!res.success) {
-        displayToast('Failed to log in', {
+        displayToast('Failed to sign in', {
           description:
-            res.error || 'Something went wrong while trying to log you in.',
+            res.error || 'Something went wrong while trying to sign you in.',
           variant: 'destructive',
         });
         return;
@@ -78,17 +78,17 @@ export const LoginForm = () => {
               </FormItem>
             )}
           />
+        </CardContent>
+        <CardFooter className='flex-col items-start gap-4'>
+          <Button type='submit' disabled={isPending} className='w-full'>
+            Sign in
+          </Button>
           <div className='text-sm text-muted-foreground'>
             Don&apos;t have an account?{' '}
             <Button asChild variant='link' className='h-auto p-0'>
               <Link href='/signup'>Sign up</Link>
             </Button>
           </div>
-        </CardContent>
-        <CardFooter className='justify-end'>
-          <Button type='submit' disabled={isPending}>
-            Login
-          </Button>
         </CardFooter>
       </form>
     </Form>

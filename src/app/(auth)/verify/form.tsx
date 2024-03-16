@@ -97,12 +97,13 @@ export const VerifyForm = () => {
                     {...field}
                     maxLength={8}
                     pattern={REGEXP_ONLY_DIGITS}
+                    className='justify-center'
                     render={({ slots }) => (
-                      <OTPInputGroup>
+                      <>
                         {slots.map((slot, index) => (
                           <OTPInputSlot key={index} {...slot} />
                         ))}
-                      </OTPInputGroup>
+                      </>
                     )}
                   />
                 </FormControl>
@@ -110,6 +111,11 @@ export const VerifyForm = () => {
               </FormItem>
             )}
           />
+        </CardContent>
+        <CardFooter className='flex-col items-start gap-4'>
+          <Button type='submit' disabled={isPending} className='w-full'>
+            Verify
+          </Button>
           <div className='text-sm text-muted-foreground'>
             Didn&apos;t get a code?{' '}
             {resendCount > 0 ? (
@@ -126,11 +132,6 @@ export const VerifyForm = () => {
               </Button>
             )}
           </div>
-        </CardContent>
-        <CardFooter className='justify-end'>
-          <Button type='submit' disabled={isPending}>
-            Verify
-          </Button>
         </CardFooter>
       </form>
     </Form>

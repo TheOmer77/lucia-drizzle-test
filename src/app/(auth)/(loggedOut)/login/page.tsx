@@ -4,8 +4,8 @@ import { LoginForm } from './form';
 const LoginPage = () => (
   <>
     <CardHeader>
-      <CardTitle>Login</CardTitle>
-      <CardDescription>Enter your login details to continue.</CardDescription>
+      <CardTitle>Welcome back!</CardTitle>
+      <CardDescription>Enter your account details to continue.</CardDescription>
     </CardHeader>
     <LoginForm />
   </>

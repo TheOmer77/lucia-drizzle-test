@@ -90,17 +90,17 @@ export const SignupForm = () => {
               </FormItem>
             )}
           />
+        </CardContent>
+        <CardFooter className='flex-col items-start gap-4'>
+          <Button type='submit' disabled={isPending} className='w-full'>
+            Sign up
+          </Button>
           <div className='text-sm text-muted-foreground'>
             Already have an account?{' '}
             <Button asChild variant='link' className='h-auto p-0'>
-              <Link href='/login'>Login</Link>
+              <Link href='/login'>Sign in</Link>
             </Button>
           </div>
-        </CardContent>
-        <CardFooter className='justify-end'>
-          <Button type='submit' disabled={isPending}>
-            Sign up
-          </Button>
         </CardFooter>
       </form>
     </Form>
