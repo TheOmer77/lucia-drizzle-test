@@ -80,7 +80,7 @@ export const createVerificationCode = async (
   userId: string,
   isResend = false
 ) => {
-  const code = generateRandomString(8, alphabet('0-9')),
+  const code = generateRandomString(6, alphabet('0-9')),
     expiresAt = createDate(new TimeSpan(15, 'm'));
   if (isResend) {
     await db

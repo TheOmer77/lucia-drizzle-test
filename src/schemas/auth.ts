@@ -19,8 +19,8 @@ export type SignupFormValues = z.infer<typeof signupFormSchema>;
 export const verifyFormSchema = z.object({
   code: z
     .string()
-    .length(8, {
-      message: 'Verification code should include exactly 8 digits.',
+    .length(6, {
+      message: 'Verification code should include exactly 6 digits.',
     })
     .regex(/^\d+$/, {
       message: 'Verification code should only include digits.',

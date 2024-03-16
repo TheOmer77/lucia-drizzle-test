@@ -95,7 +95,7 @@ export const VerifyForm = () => {
                 <FormControl>
                   <OTPInput
                     {...field}
-                    maxLength={8}
+                    maxLength={6}
                     pattern={REGEXP_ONLY_DIGITS}
                     className='justify-center'
                     render={({ slots }) => (

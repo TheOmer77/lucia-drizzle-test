@@ -69,7 +69,7 @@ const VerifyEmail = ({ code, email }: VerifyEmailProps) => (
 );
 
 VerifyEmail.PreviewProps = {
-  code: '12345678',
+  code: '123456',
   email: 'someone@example.com',
 } satisfies VerifyEmailProps;
 
