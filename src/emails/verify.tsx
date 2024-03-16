@@ -35,7 +35,7 @@ const VerifyEmail = ({ code, email }: VerifyEmailProps) => (
         },
       }}
     >
-      <Body className='mx-auto my-auto bg-background px-2 font-sans'>
+      <Body className='mx-auto my-auto px-2 font-sans'>
         <Container className='mx-auto my-10 max-w-md rounded-lg border border-solid border-border bg-card p-6 text-card-foreground'>
           <Heading className='mb-6 mt-0 p-0 text-3xl font-bold tracking-tight'>
             Verify your account
