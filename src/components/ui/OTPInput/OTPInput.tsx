@@ -15,7 +15,7 @@ export const OTPInput = forwardRef<
 >(({ className, ...props }, ref) => (
   <OTPInputRoot
     ref={ref}
-    containerClassName={cn('flex items-center gap-2', className)}
+    containerClassName={cn('flex items-center gap-1', className)}
     {...props}
   />
 ));
