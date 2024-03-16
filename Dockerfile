@@ -4,4 +4,4 @@ WORKDIR /app
 COPY package.json pnpm-lock.yaml ./
 RUN corepack enable pnpm && pnpm install
 
-CMD ["pnpm", "run", "/dev|db:studio/"]
+CMD ["pnpm", "run", "/dev|email:dev|db:studio/"]
