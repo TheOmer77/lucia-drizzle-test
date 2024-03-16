@@ -17,10 +17,10 @@ import {
   createUserSession,
   createVerificationCode,
   lucia,
+  sendVerificationEmail,
   validateRequest,
   verifyVerificationCode,
 } from '@/lib/auth';
-import { sendEmail } from '@/lib/email';
 
 export const loginUser = async (
   values: LoginFormValues
@@ -77,12 +77,7 @@ export const registerUser = async (
       .returning({ id: user.id });
 
     const verificationCode = await createVerificationCode(newUser.id);
-    await sendEmail({
-      to: email,
-      subject: 'Verify your account',
-      html: `<h1>Verify your account</h1>
-<p>Use code <b>${verificationCode}</b> as the verification code for ${email}.`,
-    });
+    await sendVerificationEmail(email, verificationCode);
 
     await createUserSession(newUser.id);
     return { success: true };
@@ -133,9 +128,9 @@ export const resendVerificationCode = async (): Promise<
     .where(eq(emailVerification.userId, currentUser.id));
   if (!currentCode)
     return { success: false, error: 'No verification code to resend.' };
+
   const msSinceUpdated = new Date().valueOf() - currentCode.updatedAt.valueOf(),
     secsSinceUpdated = Math.floor(msSinceUpdated / 1000);
-
   if (msSinceUpdated < 60000)
     return {
       success: false,
@@ -145,12 +140,8 @@ export const resendVerificationCode = async (): Promise<
     };
 
   const newCode = await createVerificationCode(currentUser.id, true);
-  await sendEmail({
-    to: currentUser.email,
-    subject: 'Verify your account',
-    html: `<h1>Verify your account</h1>
-<p>Use code <b>${newCode}</b> as the verification code for ${currentUser.email}.`,
-  });
+  await sendVerificationEmail(currentUser.email, newCode);
+
   return { success: true };
 };
 

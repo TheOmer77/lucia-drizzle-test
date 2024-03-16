@@ -5,9 +5,12 @@ import { DrizzlePostgreSQLAdapter } from '@lucia-auth/adapter-drizzle';
 import { TimeSpan, createDate, isWithinExpirationDate } from 'oslo';
 import { alphabet, generateRandomString } from 'oslo/crypto';
 import { eq } from 'drizzle-orm';
+import { render } from '@react-email/render';
 
 import { db } from '@/db';
 import { emailVerification, session, user } from '@/db/schema';
+import { sendEmail } from './email';
+import VerifyEmail from '@/emails/verify';
 
 const adapter = new DrizzlePostgreSQLAdapter(db, session, user);
 
@@ -107,4 +110,11 @@ export const verifyVerificationCode = async (userId: string, code: string) =>
 
     if (!isWithinExpirationDate(dbCode.expiresAt)) return false;
     return true;
+  });
+
+export const sendVerificationEmail = async (email: string, code: string) =>
+  await sendEmail({
+    to: email,
+    subject: 'Verify your account',
+    html: render(VerifyEmail({ email, code })),
   });
