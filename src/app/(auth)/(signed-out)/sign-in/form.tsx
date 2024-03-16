@@ -18,32 +18,33 @@ import {
 } from '@/components/ui/Form';
 import { Input } from '@/components/ui/Input';
 import { useToast } from '@/hooks/useToast';
-import { registerUser } from '@/actions/auth';
-import { signupFormSchema, type SignupFormValues } from '@/schemas/auth';
+import { loginUser } from '@/actions/auth';
+import { loginFormSchema, type LoginFormValues } from '@/schemas/auth';
 
-export const SignupForm = () => {
+export const LoginForm = () => {
   const { displayToast } = useToast();
   const [isPending, startTransition] = useTransition();
 
-  const form = useForm<SignupFormValues>({
-    resolver: zodResolver(signupFormSchema),
-    defaultValues: { email: '', password: '', confirmPassword: '' },
+  const form = useForm<LoginFormValues>({
+    resolver: zodResolver(loginFormSchema),
+    defaultValues: { email: '', password: '' },
   });
 
-  const onSubmit = async (values: SignupFormValues) => {
+  const onSubmit = async (values: LoginFormValues) => {
     startTransition(async () => {
-      const res = await registerUser(values);
+      const res = await loginUser(values);
       if (!res.success) {
-        displayToast('Failed to sign up', {
+        displayToast('Failed to sign in', {
           description:
-            res.error ||
-            'Something went wrong while trying to create your new user.',
+            res.error || 'Something went wrong while trying to sign you in.',
           variant: 'destructive',
         });
         return;
       }
 
-      redirect('/verify');
+      if (!res.data.emailVerified) redirect('/verify');
+      displayToast(`Welcome back!`);
+      redirect('/');
     });
   };
 
@@ -77,28 +78,15 @@ export const SignupForm = () => {
               </FormItem>
             )}
           />
-          <FormField
-            control={form.control}
-            name='confirmPassword'
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Confirm password</FormLabel>
-                <FormControl>
-                  <Input {...field} type='password' />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
         </CardContent>
         <CardFooter className='flex-col items-start gap-4'>
           <Button type='submit' disabled={isPending} className='w-full'>
-            Sign up
+            Sign in
           </Button>
           <div className='text-sm text-muted-foreground'>
-            Already have an account?{' '}
+            Don&apos;t have an account?{' '}
             <Button asChild variant='link' className='h-auto p-0'>
-              <Link href='/login'>Sign in</Link>
+              <Link href='/sign-up'>Sign up</Link>
             </Button>
           </div>
         </CardFooter>

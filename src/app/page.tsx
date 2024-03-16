@@ -14,7 +14,7 @@ import { validateRequest } from '@/lib/auth';
 
 const Home = async () => {
   const { user } = await validateRequest();
-  if (!user) redirect('/login');
+  if (!user) redirect('/sign-in');
   if (!user.emailVerified) redirect('/verify');
 
   return (
