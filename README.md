@@ -6,8 +6,9 @@ This project uses [Docker](https://www.docker.com/) to run the Next.js app itsel
 
 ## Getting Started
 
-First, copy the contents of `.env.example` into a new `.env` file, and fill in any empty variables. \
-With the default DB values, the local Postgres DB run with Docker will be used. If you want to use a different database, feel free to change the relevant values.
+First, copy the contents of `.env.example` into a new `.env` file, and fill in any empty variables.
+
+If not filling in the DB values, the local Postgres DB run with Docker will be used by default. If you want to use a different database, feel free to change these values. **All other variables are required.**
 
 Now run both the local DB and the Next app with Docker Compose:
 
