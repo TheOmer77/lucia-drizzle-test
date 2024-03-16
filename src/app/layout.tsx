@@ -1,11 +1,11 @@
 import type { PropsWithChildren } from 'react';
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
+import { Manrope } from 'next/font/google';
 
-import '@/styles/index.css';
 import { Toaster } from '@/components/ui/Toast';
+import '@/styles/index.css';
 
-const inter = Inter({ subsets: ['latin'] });
+const font = Manrope({ subsets: ['latin'], variable: '--font-sans' });
 
 export const metadata: Metadata = {
   title: 'Lucia + Drizzle test',
@@ -13,8 +13,8 @@ export const metadata: Metadata = {
 };
 
 const RootLayout = ({ children }: PropsWithChildren) => (
-  <html lang='en'>
-    <body className={inter.className}>
+  <html lang='en' className={font.variable}>
+    <body>
       {children}
       <Toaster />
     </body>
