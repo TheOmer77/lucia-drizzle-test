@@ -20,6 +20,7 @@ import {
   validateRequest,
   verifyVerificationCode,
 } from '@/lib/auth';
+import { sendEmail } from '@/lib/email';
 
 export const loginUser = async (
   values: LoginFormValues
@@ -76,10 +77,12 @@ export const registerUser = async (
       .returning({ id: user.id });
 
     const verificationCode = await createVerificationCode(newUser.id);
-    // TODO: Send verification code by email
-    console.log(
-      `TEMPORARY LOG: Use code '${verificationCode}' as the verification code for ${values.email}.`
-    );
+    await sendEmail({
+      to: email,
+      subject: 'Verify your account',
+      html: `<h1>Verify your account</h1>
+<p>Use code <b>${verificationCode}</b> as the verification code for ${email}.`,
+    });
 
     await createUserSession(newUser.id);
     return { success: true };
@@ -142,10 +145,12 @@ export const resendVerificationCode = async (): Promise<
     };
 
   const newCode = await createVerificationCode(currentUser.id, true);
-  // TODO: Send verification code by email
-  console.log(
-    `TEMPORARY LOG: Use code '${newCode}' as the verification code for ${currentUser.email}.`
-  );
+  await sendEmail({
+    to: currentUser.email,
+    subject: 'Verify your account',
+    html: `<h1>Verify your account</h1>
+<p>Use code <b>${newCode}</b> as the verification code for ${currentUser.email}.`,
+  });
   return { success: true };
 };
 
