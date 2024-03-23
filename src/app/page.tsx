@@ -22,7 +22,7 @@ const Home = async () => {
       <div>
         <h1
           className='mb-8 w-full text-center text-8xl font-extrabold
-tracking-tight'
+tracking-tighter'
         >
           Hello.
         </h1>
