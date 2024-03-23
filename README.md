@@ -16,5 +16,11 @@ Now run both the local DB and the Next app with Docker Compose:
 docker compose up -d
 ```
 
+Initialize the database by running:
+
+```bash
+docker compose exec app pnpm db:push
+```
+
 Open [localhost:3000](http://localhost:3000) in your browser to see the app. \
 You can also view the database in Drizzle Studio at [local.drizzle.studio](https://local.drizzle.studio/).
