@@ -78,6 +78,10 @@
 
   @media (prefers-color-scheme: dark) {
     :root {
+      --color-destructive-main: var(--color-destructive-300);
+      --color-destructive-active: var(--color-destructive-400);
+      --color-destructive-foreground: var(--color-destructive-950);
+
       --color-background: var(--color-neutral-950);
       --color-foreground: var(--color-neutral-100);
       --color-card: var(--color-neutral-900);
