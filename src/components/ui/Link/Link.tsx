@@ -20,7 +20,9 @@ export const Link = forwardRef<ElementRef<typeof NextLink>, LinkProps>(
         ref={ref}
         href={href}
         className={cn(
-          'text-primary underline-offset-4 hover:underline',
+          `rounded-sm text-primary underline-offset-4 hover:underline
+focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2
+focus-visible:outline-ring`,
           className
         )}
       >
