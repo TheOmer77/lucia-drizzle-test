@@ -1,10 +1,12 @@
 'use client';
 
-import { useTransition } from 'react';
+import { useState, useTransition } from 'react';
 import { redirect } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
+import { OctagonAlertIcon } from 'lucide-react';
 
+import { Alert } from '@/components/ui/Alert';
 import { Button } from '@/components/ui/Button';
 import { CardContent, CardFooter } from '@/components/ui/Card';
 import {
@@ -17,12 +19,11 @@ import {
 } from '@/components/ui/Form';
 import { Input } from '@/components/ui/Input';
 import { Link } from '@/components/ui/Link';
-import { useToast } from '@/hooks/useToast';
 import { signUp } from '@/actions/auth/signUp';
 import { signUpFormSchema, type SignUpFormValues } from '@/schemas/auth';
 
 export const SignupForm = () => {
-  const { displayToast } = useToast();
+  const [error, setError] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
 
   const form = useForm<SignUpFormValues>({
@@ -32,14 +33,13 @@ export const SignupForm = () => {
 
   const onSubmit = async (values: SignUpFormValues) => {
     startTransition(async () => {
+      setError(null);
       const res = await signUp(values);
       if (!res.success) {
-        displayToast('Failed to sign up', {
-          description:
-            res.error ||
-            'Something went wrong while trying to create your new user.',
-          variant: 'destructive',
-        });
+        setError(
+          res.error ||
+            'Something went wrong while trying to create your new user.'
+        );
         return;
       }
 
@@ -77,6 +77,12 @@ export const SignupForm = () => {
               </FormItem>
             )}
           />
+          {error && (
+            <Alert variant='destructive'>
+              <OctagonAlertIcon />
+              {error}
+            </Alert>
+          )}
         </CardContent>
         <CardFooter className='flex-col items-start gap-4'>
           <Button
