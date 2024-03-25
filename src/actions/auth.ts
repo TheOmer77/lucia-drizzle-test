@@ -5,11 +5,11 @@ import { Argon2id } from 'oslo/password';
 import { eq, sql } from 'drizzle-orm';
 
 import {
-  loginFormSchema,
-  signupFormSchema,
+  signInFormSchema,
+  signUpFormSchema,
   verifyFormSchema,
-  type LoginFormValues,
-  type SignupFormValues,
+  type SignInFormValues,
+  type SignUpFormValues,
 } from '@/schemas/auth';
 import { db } from '@/db';
 import { emailVerification, user, type User } from '@/db/schema';
@@ -23,12 +23,12 @@ import {
 } from '@/lib/auth';
 
 export const loginUser = async (
-  values: LoginFormValues
+  values: SignInFormValues
 ): Promise<
   | { success: true; data: Pick<User, 'emailVerified'> }
   | { success: false; error: string }
 > => {
-  loginFormSchema.parse(values);
+  signInFormSchema.parse(values);
 
   const [existingUser] = await db
     .select({
@@ -54,9 +54,9 @@ export const loginUser = async (
 };
 
 export const registerUser = async (
-  values: SignupFormValues
+  values: SignUpFormValues
 ): Promise<{ success: true } | { success: false; error: string }> => {
-  signupFormSchema.parse(values);
+  signUpFormSchema.parse(values);
   const { email, password } = values;
 
   const userExists = (

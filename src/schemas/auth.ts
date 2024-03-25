@@ -5,19 +5,19 @@ const email = z
   .min(1, { message: 'Email is required.' })
   .email({ message: 'Invalid email address.' });
 
-export const loginFormSchema = z.object({
+export const signInFormSchema = z.object({
   email,
   password: z.string().min(1, { message: 'Password is required.' }),
 });
-export type LoginFormValues = z.infer<typeof loginFormSchema>;
+export type SignInFormValues = z.infer<typeof signInFormSchema>;
 
-export const signupFormSchema = z.object({
+export const signUpFormSchema = z.object({
   email,
   password: z
     .string()
     .min(8, { message: 'Password must be at least 8 characters long.' }),
 });
-export type SignupFormValues = z.infer<typeof signupFormSchema>;
+export type SignUpFormValues = z.infer<typeof signUpFormSchema>;
 
 export const verifyFormSchema = z.object({
   code: z

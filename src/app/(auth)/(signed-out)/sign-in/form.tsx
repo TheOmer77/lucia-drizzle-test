@@ -19,18 +19,18 @@ import { Input } from '@/components/ui/Input';
 import { Link } from '@/components/ui/Link';
 import { useToast } from '@/hooks/useToast';
 import { loginUser } from '@/actions/auth';
-import { loginFormSchema, type LoginFormValues } from '@/schemas/auth';
+import { signInFormSchema, type SignInFormValues } from '@/schemas/auth';
 
 export const LoginForm = () => {
   const { displayToast } = useToast();
   const [isPending, startTransition] = useTransition();
 
-  const form = useForm<LoginFormValues>({
-    resolver: zodResolver(loginFormSchema),
+  const form = useForm<SignInFormValues>({
+    resolver: zodResolver(signInFormSchema),
     defaultValues: { email: '', password: '' },
   });
 
-  const onSubmit = async (values: LoginFormValues) => {
+  const onSubmit = async (values: SignInFormValues) => {
     startTransition(async () => {
       const res = await loginUser(values);
       if (!res.success) {
