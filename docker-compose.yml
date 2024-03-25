@@ -19,6 +19,7 @@ services:
       - MAIL_SECURE=${MAIL_SECURE:?error}
       - MAIL_USER=${MAIL_USER:?error}
       - MAIL_PASSWORD=${MAIL_PASSWORD:?error}
+      - MAIL_SENDER=${MAIL_SENDER:?error}
 
   db:
     image: postgres:16.2-alpine3.19

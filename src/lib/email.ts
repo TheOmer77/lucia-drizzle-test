@@ -11,8 +11,4 @@ const transporter = createTransport({
 
 export const sendEmail = async (
   options: Required<Pick<SendMailOptions, 'to' | 'subject' | 'html'>>
-) =>
-  await transporter.sendMail({
-    from: `"Omer's test app" <${env.MAIL_USER}>`,
-    ...options,
-  });
+) => await transporter.sendMail({ from: env.MAIL_SENDER, ...options });

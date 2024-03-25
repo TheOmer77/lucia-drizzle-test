@@ -14,6 +14,7 @@ export const env = createEnv({
       .string()
       .refine(s => s.toLowerCase() === 'true' || s.toLowerCase() === 'false')
       .transform(s => s === 'true'),
+    MAIL_SENDER: z.string(),
     MAIL_USER: z.string(),
     NODE_ENV: z.enum(['development', 'production', 'test']),
   },
@@ -23,6 +24,7 @@ export const env = createEnv({
     MAIL_PASSWORD: process.env.MAIL_PASSWORD,
     MAIL_PORT: process.env.MAIL_PORT,
     MAIL_SECURE: process.env.MAIL_SECURE,
+    MAIL_SENDER: process.env.MAIL_SENDER,
     MAIL_USER: process.env.MAIL_USER,
     NODE_ENV: process.env.NODE_ENV,
   },
