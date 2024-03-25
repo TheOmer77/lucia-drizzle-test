@@ -16,11 +16,8 @@ import {
   FormItem,
   FormMessage,
 } from '@/components/ui/Form';
-import {
-  OTPInput,
-  OTPInputGroup,
-  OTPInputSlot,
-} from '@/components/ui/OTPInput';
+import { Link } from '@/components/ui/Link';
+import { OTPInput, OTPInputSlot } from '@/components/ui/OTPInput';
 import { useToast } from '@/hooks/useToast';
 import { verifyFormSchema, type VerifyFormValues } from '@/schemas/auth';
 import {
@@ -129,15 +126,15 @@ export const VerifyForm = () => {
             {resendCount > 0 ? (
               `Try resending it in ${resendCount} ${resendCount === 1 ? 'second' : 'seconds'}.`
             ) : (
-              <Button
-                variant='link'
-                className='h-auto p-0'
-                type='button'
-                disabled={isPending}
-                onClick={handleResend}
-              >
-                Resend
-              </Button>
+              <Link asChild href=''>
+                <button
+                  type='button'
+                  onClick={handleResend}
+                  disabled={isPending}
+                >
+                  Resend
+                </button>
+              </Link>
             )}
           </div>
         </CardFooter>
