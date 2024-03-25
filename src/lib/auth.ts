@@ -7,10 +7,11 @@ import { alphabet, generateRandomString } from 'oslo/crypto';
 import { eq } from 'drizzle-orm';
 import { render } from '@react-email/render';
 
+import { sendEmail } from './email';
 import { db } from '@/db';
 import { emailVerification, session, user } from '@/db/schema';
-import { sendEmail } from './email';
 import VerifyEmail from '@/emails/verify';
+import { env } from '@/config/env';
 
 const adapter = new DrizzlePostgreSQLAdapter(db, session, user);
 
@@ -19,7 +20,7 @@ export const lucia = new Lucia(adapter, {
     /** This sets cookies with super long expiration, since Next.js doesn't
      * allow Lucia to extend cookie expiration when rendering pages */
     expires: false,
-    attributes: { secure: process.env.NODE_ENV === 'production' },
+    attributes: { secure: env.NODE_ENV === 'production' },
   },
   getUserAttributes: attributes => ({
     email: attributes.email,
