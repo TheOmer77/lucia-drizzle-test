@@ -113,7 +113,12 @@ export const VerifyForm = () => {
           />
         </CardContent>
         <CardFooter className='flex-col items-start gap-4'>
-          <Button type='submit' disabled={isPending} className='w-full'>
+          <Button
+            type='submit'
+            variant='primary'
+            disabled={isPending}
+            className='w-full'
+          >
             Verify
           </Button>
           <div className='text-sm text-muted-foreground'>

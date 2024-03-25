@@ -40,7 +40,9 @@ tracking-tighter'
           </CardContent>
           <CardFooter>
             <form action={logoutUser} className='w-full [&>*]:w-full'>
-              <Button type='submit'>Sign out</Button>
+              <Button type='submit' variant='primary'>
+                Sign out
+              </Button>
             </form>
           </CardFooter>
         </Card>
