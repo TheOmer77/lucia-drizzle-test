@@ -4,7 +4,7 @@ import { z } from 'zod';
 export const env = createEnv({
   server: {
     DB_URL: z.string().url(),
-    MAIL_HOST: z.string().url(),
+    MAIL_HOST: z.string(),
     MAIL_PASSWORD: z.string(),
     MAIL_PORT: z
       .string()
@@ -16,7 +16,9 @@ export const env = createEnv({
       .transform(s => s === 'true'),
     MAIL_SENDER: z.string(),
     MAIL_USER: z.string(),
-    NODE_ENV: z.enum(['development', 'production', 'test']),
+    NODE_ENV: z
+      .enum(['development', 'production', 'test'])
+      .default('development'),
   },
   runtimeEnv: {
     DB_URL: process.env.DB_URL,
