@@ -1,19 +1,22 @@
 import { z } from 'zod';
 
-const email = z.string().email({ message: 'Invalid email address.' }),
-  password = z
-    .string()
-    .min(8, { message: 'Password must be at least 8 characters long.' });
+const email = z
+  .string()
+  .min(1, { message: 'Email is required.' })
+  .email({ message: 'Invalid email address.' });
 
-export const loginFormSchema = z.object({ email, password });
+export const loginFormSchema = z.object({
+  email,
+  password: z.string().min(1, { message: 'Password is required.' }),
+});
 export type LoginFormValues = z.infer<typeof loginFormSchema>;
 
-export const signupFormSchema = z
-  .object({ email, password, confirmPassword: password })
-  .refine(data => data.password === data.confirmPassword, {
-    message: "Passwords don't match.",
-    path: ['confirmPassword'],
-  });
+export const signupFormSchema = z.object({
+  email,
+  password: z
+    .string()
+    .min(8, { message: 'Password must be at least 8 characters long.' }),
+});
 export type SignupFormValues = z.infer<typeof signupFormSchema>;
 
 export const verifyFormSchema = z.object({

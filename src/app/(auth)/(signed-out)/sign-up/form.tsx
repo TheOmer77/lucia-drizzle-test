@@ -27,7 +27,7 @@ export const SignupForm = () => {
 
   const form = useForm<SignupFormValues>({
     resolver: zodResolver(signupFormSchema),
-    defaultValues: { email: '', password: '', confirmPassword: '' },
+    defaultValues: { email: '', password: '' },
   });
 
   const onSubmit = async (values: SignupFormValues) => {
@@ -70,19 +70,6 @@ export const SignupForm = () => {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Password</FormLabel>
-                <FormControl>
-                  <Input {...field} type='password' />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name='confirmPassword'
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Confirm password</FormLabel>
                 <FormControl>
                   <Input {...field} type='password' />
                 </FormControl>
