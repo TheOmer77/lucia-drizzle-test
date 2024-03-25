@@ -4,6 +4,8 @@
 
 @layer base {
   :root {
+    color-scheme: light dark;
+
     /* primary */
     --color-primary-50: 235 253 236;
     --color-primary-100: 202 250 204;
