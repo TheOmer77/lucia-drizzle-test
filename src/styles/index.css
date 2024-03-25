@@ -4,49 +4,97 @@
 
 @layer base {
   :root {
-    --background: 125 65% 100%;
-    --foreground: 125 66% 2%;
-    --muted: 125 12% 89%;
-    --muted-foreground: 125 8% 30%;
-    --popover: 125 65% 100%;
-    --popover-foreground: 125 66% 2%;
-    --card: 125 65% 100%;
-    --card-foreground: 125 66% 2%;
-    --border: 125 14% 90%;
-    --input: 125 14% 90%;
-    --primary: 125 40% 55%;
-    --primary-foreground: 0 0% 0%;
-    --secondary: 125 2% 82%;
-    --secondary-foreground: 125 2% 22%;
-    --accent: 125 2% 82%;
-    --accent-foreground: 125 2% 22%;
-    --destructive: 17 84% 30%;
-    --destructive-foreground: 17 84% 90%;
-    --ring: 125 40% 55%;
-    --radius: 0.5rem;
+    /* primary */
+    --color-primary-50: 235 253 236;
+    --color-primary-100: 202 250 204;
+    --color-primary-200: 133 236 141;
+    --color-primary-300: 106 207 115;
+    --color-primary-400: 88 175 95;
+    --color-primary-500: 70 143 77;
+    --color-primary-600: 54 112 59;
+    --color-primary-700: 38 82 41;
+    --color-primary-800: 22 53 25;
+    --color-primary-900: 7 24 8;
+    --color-primary-950: 2 8 2;
+
+    --color-primary-main: var(--color-primary-300);
+    --color-primary-active: var(--color-primary-400);
+    --color-primary-foreground: var(--color-primary-950);
+
+    /* neutral */
+    --color-neutral-50: 246 248 246;
+    --color-neutral-100: 232 237 232;
+    --color-neutral-200: 201 212 201;
+    --color-neutral-300: 170 185 170;
+    --color-neutral-400: 141 157 141;
+    --color-neutral-500: 114 129 114;
+    --color-neutral-600: 88 101 88;
+    --color-neutral-700: 63 74 63;
+    --color-neutral-800: 40 48 40;
+    --color-neutral-900: 17 21 17;
+    --color-neutral-950: 5 6 5;
+
+    --color-neutral-main: var(--color-neutral-300);
+    --color-neutral-active: var(--color-neutral-400);
+    --color-neutral-foreground: var(--color-neutral-950);
+
+    /* destructive */
+    --color-destructive-50: 254 245 244;
+    --color-destructive-100: 252 229 226;
+    --color-destructive-200: 249 192 186;
+    --color-destructive-300: 245 151 142;
+    --color-destructive-400: 233 107 100;
+    --color-destructive-500: 205 73 68;
+    --color-destructive-600: 164 52 50;
+    --color-destructive-700: 123 36 34;
+    --color-destructive-800: 82 21 19;
+    --color-destructive-900: 40 6 6;
+    --color-destructive-950: 17 2 1;
+
+    --color-destructive-main: var(--color-destructive-500);
+    --color-destructive-active: var(--color-destructive-400);
+    --color-destructive-foreground: var(--color-destructive-50);
+
+    --color-background: 255 255 255;
+    --color-foreground: var(--color-neutral-900);
+    --color-card: var(--color-neutral-50);
+    --color-card-foreground: var(--color-neutral-900);
+    --color-popover: 255 255 255;
+    --color-popover-foreground: var(--color-neutral-900);
+    --color-secondary: var(--color-neutral-100);
+    --color-secondary-foreground: var(--color-neutral-800);
+    --color-muted: var(--color-neutral-300);
+    --color-muted-foreground: var(--color-neutral-600);
+    --color-accent: var(--color-neutral-100);
+    --color-accent-foreground: var(--color-neutral-900);
+    --color-border: var(--color-neutral-200);
+    --color-input: var(--color-neutral-200);
+    --color-input-hover: var(--color-neutral-400);
+    --color-input-invalid: var(--color-destructive-600);
+    --color-ring: var(--color-primary-600);
+
+    --border-radius: 0.5rem;
   }
 
   @media (prefers-color-scheme: dark) {
     :root {
-      --background: 125 52% 1%;
-      --foreground: 125 21% 98%;
-      --muted: 125 12% 11%;
-      --muted-foreground: 125 8% 70%;
-      --popover: 125 52% 1%;
-      --popover-foreground: 125 21% 98%;
-      --card: 125 52% 1%;
-      --card-foreground: 125 21% 98%;
-      --border: 125 14% 14%;
-      --input: 125 14% 14%;
-      --primary: 125 40% 55%;
-      --primary-foreground: 0 0% 0%;
-      --secondary: 125 2% 17%;
-      --secondary-foreground: 125 2% 77%;
-      --accent: 125 2% 17%;
-      --accent-foreground: 125 2% 77%;
-      --destructive: 17 84% 58%;
-      --destructive-foreground: 0 0% 0%;
-      --ring: 125 40% 55%;
+      --color-background: var(--color-neutral-950);
+      --color-foreground: var(--color-neutral-100);
+      --color-card: var(--color-neutral-900);
+      --color-card-foreground: var(--color-neutral-100);
+      --color-popover: var(--color-neutral-900);
+      --color-popover-foreground: var(--color-neutral-100);
+      --color-secondary: var(--color-neutral-800);
+      --color-secondary-foreground: var(--color-neutral-200);
+      --color-muted: var(--color-neutral-700);
+      --color-muted-foreground: var(--color-neutral-400);
+      --color-accent: var(--color-neutral-800);
+      --color-accent-foreground: var(--color-neutral-100);
+      --color-border: var(--color-neutral-800);
+      --color-input: var(--color-neutral-800);
+      --color-input-hover: var(--color-neutral-600);
+      --color-input-invalid: var(--color-destructive-300);
+      --color-ring: var(--color-primary-300);
     }
   }
 }
