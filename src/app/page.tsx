@@ -9,7 +9,7 @@ import {
   CardTitle,
 } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
-import { logoutUser } from '@/actions/auth';
+import { signOut } from '@/actions/auth/signOut';
 import { validateRequest } from '@/lib/auth';
 
 const Home = async () => {
@@ -39,7 +39,7 @@ tracking-tighter'
             ))}
           </CardContent>
           <CardFooter>
-            <form action={logoutUser} className='w-full [&>*]:w-full'>
+            <form action={signOut} className='w-full [&>*]:w-full'>
               <Button type='submit' variant='primary'>
                 Sign out
               </Button>

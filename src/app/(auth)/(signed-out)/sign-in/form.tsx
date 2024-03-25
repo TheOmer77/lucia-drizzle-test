@@ -18,7 +18,7 @@ import {
 import { Input } from '@/components/ui/Input';
 import { Link } from '@/components/ui/Link';
 import { useToast } from '@/hooks/useToast';
-import { loginUser } from '@/actions/auth';
+import { signIn } from '@/actions/auth/signIn';
 import { signInFormSchema, type SignInFormValues } from '@/schemas/auth';
 
 export const LoginForm = () => {
@@ -32,7 +32,7 @@ export const LoginForm = () => {
 
   const onSubmit = async (values: SignInFormValues) => {
     startTransition(async () => {
-      const res = await loginUser(values);
+      const res = await signIn(values);
       if (!res.success) {
         displayToast('Failed to sign in', {
           description:
@@ -43,7 +43,6 @@ export const LoginForm = () => {
       }
 
       if (!res.data.emailVerified) redirect('/verify');
-      displayToast(`Welcome back!`);
       redirect('/');
     });
   };

@@ -23,7 +23,10 @@ import {
 } from '@/components/ui/OTPInput';
 import { useToast } from '@/hooks/useToast';
 import { verifyFormSchema, type VerifyFormValues } from '@/schemas/auth';
-import { resendVerificationCode, verifyUser } from '@/actions/auth';
+import {
+  resendEmailVerification,
+  verifyEmailVerification,
+} from '@/actions/auth/emailVerification';
 
 export const VerifyForm = () => {
   const { displayToast } = useToast();
@@ -38,7 +41,7 @@ export const VerifyForm = () => {
 
   const handleSubmit = (values: VerifyFormValues) => {
     startTransition(async () => {
-      const res = await verifyUser(values.code);
+      const res = await verifyEmailVerification(values.code);
       if (!res.success) {
         displayToast('Failed to verify code', {
           description:
@@ -60,7 +63,7 @@ export const VerifyForm = () => {
 
   const handleResend = async () => {
     startTransition(async () => {
-      const res = await resendVerificationCode();
+      const res = await resendEmailVerification();
       if (!res.success) {
         displayToast('Failed to resend code', {
           description:

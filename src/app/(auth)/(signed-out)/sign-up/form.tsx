@@ -18,7 +18,7 @@ import {
 import { Input } from '@/components/ui/Input';
 import { Link } from '@/components/ui/Link';
 import { useToast } from '@/hooks/useToast';
-import { registerUser } from '@/actions/auth';
+import { signUp } from '@/actions/auth/signUp';
 import { signUpFormSchema, type SignUpFormValues } from '@/schemas/auth';
 
 export const SignupForm = () => {
@@ -32,7 +32,7 @@ export const SignupForm = () => {
 
   const onSubmit = async (values: SignUpFormValues) => {
     startTransition(async () => {
-      const res = await registerUser(values);
+      const res = await signUp(values);
       if (!res.success) {
         displayToast('Failed to sign up', {
           description:
