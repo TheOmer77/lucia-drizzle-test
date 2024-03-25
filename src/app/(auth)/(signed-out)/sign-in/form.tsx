@@ -1,10 +1,12 @@
 'use client';
 
-import { useTransition } from 'react';
+import { useState, useTransition } from 'react';
 import { redirect } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
+import { OctagonAlertIcon } from 'lucide-react';
 
+import { Alert } from '@/components/ui/Alert';
 import { Button } from '@/components/ui/Button';
 import { CardContent, CardFooter } from '@/components/ui/Card';
 import {
@@ -17,12 +19,11 @@ import {
 } from '@/components/ui/Form';
 import { Input } from '@/components/ui/Input';
 import { Link } from '@/components/ui/Link';
-import { useToast } from '@/hooks/useToast';
 import { signIn } from '@/actions/auth/signIn';
 import { signInFormSchema, type SignInFormValues } from '@/schemas/auth';
 
 export const LoginForm = () => {
-  const { displayToast } = useToast();
+  const [error, setError] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
 
   const form = useForm<SignInFormValues>({
@@ -32,13 +33,12 @@ export const LoginForm = () => {
 
   const onSubmit = async (values: SignInFormValues) => {
     startTransition(async () => {
+      setError(null);
       const res = await signIn(values);
       if (!res.success) {
-        displayToast('Failed to sign in', {
-          description:
-            res.error || 'Something went wrong while trying to sign you in.',
-          variant: 'destructive',
-        });
+        setError(
+          res.error || 'Something went wrong while trying to sign you in.'
+        );
         return;
       }
 
@@ -82,6 +82,12 @@ export const LoginForm = () => {
               </FormItem>
             )}
           />
+          {error && (
+            <Alert variant='destructive'>
+              <OctagonAlertIcon />
+              {error}
+            </Alert>
+          )}
         </CardContent>
         <CardFooter className='flex-col items-start gap-4'>
           <Button
