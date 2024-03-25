@@ -1,7 +1,6 @@
 'use client';
 
 import { useTransition } from 'react';
-import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
@@ -17,6 +16,7 @@ import {
   FormMessage,
 } from '@/components/ui/Form';
 import { Input } from '@/components/ui/Input';
+import { Link } from '@/components/ui/Link';
 import { useToast } from '@/hooks/useToast';
 import { registerUser } from '@/actions/auth';
 import { signupFormSchema, type SignupFormValues } from '@/schemas/auth';
@@ -96,10 +96,7 @@ export const SignupForm = () => {
             Sign up
           </Button>
           <div className='text-sm text-muted-foreground'>
-            Already have an account?{' '}
-            <Button asChild variant='link' className='h-auto p-0'>
-              <Link href='/sign-in'>Sign in</Link>
-            </Button>
+            Already have an account? <Link href='/sign-in'>Sign in</Link>
           </div>
         </CardFooter>
       </form>

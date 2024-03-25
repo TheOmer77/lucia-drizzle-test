@@ -1,7 +1,6 @@
 'use client';
 
 import { useTransition } from 'react';
-import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
@@ -17,6 +16,7 @@ import {
   FormMessage,
 } from '@/components/ui/Form';
 import { Input } from '@/components/ui/Input';
+import { Link } from '@/components/ui/Link';
 import { useToast } from '@/hooks/useToast';
 import { loginUser } from '@/actions/auth';
 import { loginFormSchema, type LoginFormValues } from '@/schemas/auth';
@@ -72,9 +72,9 @@ export const LoginForm = () => {
               <FormItem>
                 <div className='flex items-center'>
                   <FormLabel>Password</FormLabel>
-                  <Button asChild variant='link' className='ms-auto h-auto p-0'>
-                    <Link href='/forgot-password'>Forgot password?</Link>
-                  </Button>
+                  <Link href='/forgot-password' className='ms-auto text-sm'>
+                    Forgot password?
+                  </Link>
                 </div>
                 <FormControl>
                   <Input {...field} type='password' />
@@ -89,10 +89,7 @@ export const LoginForm = () => {
             Sign in
           </Button>
           <div className='text-sm text-muted-foreground'>
-            Don&apos;t have an account?{' '}
-            <Button asChild variant='link' className='h-auto p-0'>
-              <Link href='/sign-up'>Sign up</Link>
-            </Button>
+            Don&apos;t have an account? <Link href='/sign-up'>Sign up</Link>
           </div>
         </CardFooter>
       </form>
