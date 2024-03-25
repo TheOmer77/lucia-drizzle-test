@@ -1,11 +1,15 @@
-import { CardDescription, CardHeader, CardTitle } from '@/components/ui/Card';
 import { LoginForm } from './form';
+import { AuthPageDescription } from '../../AuthPageDescription';
+import { AuthPageTitle } from '../../AuthPageTitle';
+import { CardHeader } from '@/components/ui/Card';
 
 const LoginPage = () => (
   <>
     <CardHeader>
-      <CardTitle>Welcome back!</CardTitle>
-      <CardDescription>Enter your account details to continue.</CardDescription>
+      <AuthPageTitle>Welcome back!</AuthPageTitle>
+      <AuthPageDescription className='text-base'>
+        Enter your account details to continue.
+      </AuthPageDescription>
     </CardHeader>
     <LoginForm />
   </>

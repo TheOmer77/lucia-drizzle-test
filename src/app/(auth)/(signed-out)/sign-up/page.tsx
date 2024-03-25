@@ -1,13 +1,15 @@
 import { SignupForm } from './form';
-import { CardDescription, CardHeader, CardTitle } from '@/components/ui/Card';
+import { AuthPageDescription } from '../../AuthPageDescription';
+import { AuthPageTitle } from '../../AuthPageTitle';
+import { CardHeader } from '@/components/ui/Card';
 
 const SignupPage = () => (
   <>
     <CardHeader>
-      <CardTitle>Let&apos;s create your account</CardTitle>
-      <CardDescription>
-        Fill in your details below to get started.
-      </CardDescription>
+      <AuthPageTitle>Let&apos;s get started</AuthPageTitle>
+      <AuthPageDescription>
+        Fill in your details below to create your account.
+      </AuthPageDescription>
     </CardHeader>
     <SignupForm />
   </>

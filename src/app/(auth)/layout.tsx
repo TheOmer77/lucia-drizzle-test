@@ -1,10 +1,15 @@
 import type { PropsWithChildren } from 'react';
 
-import { Card } from '@/components/ui/Card';
+import { SunTornado } from '@/components/backgrounds/SunTornado';
 
 const AuthLayout = ({ children }: PropsWithChildren) => (
-  <div className='grid min-h-dvh w-full place-items-center p-4'>
-    <Card className='w-full max-w-md'>{children}</Card>
+  <div className='min-h-dvh w-full lg:grid lg:grid-cols-2'>
+    <div className='grid place-items-center py-12'>
+      <div className='grid w-full max-w-sm'>{children}</div>
+    </div>
+    <div className='hidden overflow-hidden lg:block'>
+      <SunTornado animated className='h-full' />
+    </div>
   </div>
 );
 

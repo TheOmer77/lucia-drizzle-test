@@ -70,7 +70,12 @@ export const LoginForm = () => {
             name='password'
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Password</FormLabel>
+                <div className='flex items-center'>
+                  <FormLabel>Password</FormLabel>
+                  <Button asChild variant='link' className='ms-auto h-auto p-0'>
+                    <Link href='/forgot-password'>Forgot password?</Link>
+                  </Button>
+                </div>
                 <FormControl>
                   <Input {...field} type='password' />
                 </FormControl>
