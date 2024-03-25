@@ -14,8 +14,11 @@ services:
       - /app/node_modules
     environment:
       - DB_URL=${DB_URL:-postgres://postgres:postgres@db:5432/postgres}
-      - GMAIL_USER=${GMAIL_USER:?error}
-      - GMAIL_PASSWORD=${GMAIL_PASSWORD:?error}
+      - MAIL_HOST=${MAIL_HOST:?error}
+      - MAIL_PORT=${MAIL_PORT:?error}
+      - MAIL_SECURE=${MAIL_SECURE:?error}
+      - MAIL_USER=${MAIL_USER:?error}
+      - MAIL_PASSWORD=${MAIL_PASSWORD:?error}
 
   db:
     image: postgres:16.2-alpine3.19
