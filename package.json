@@ -24,6 +24,7 @@
     "@react-email/components": "^0.0.16",
     "@react-email/render": "^0.0.12",
     "@t3-oss/env-nextjs": "^0.9.2",
+    "arctic": "^1.5.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
     "drizzle-orm": "^0.30.6",
