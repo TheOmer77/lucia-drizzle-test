@@ -1,6 +1,6 @@
 import type { PropsWithChildren } from 'react';
 
-import { SunTornado } from '@/components/backgrounds/SunTornado';
+import { SunTornado } from '@/components/layout/backgrounds/SunTornado';
 
 const AuthLayout = ({ children }: PropsWithChildren) => (
   <div className='min-h-dvh w-full lg:grid lg:grid-cols-2'>
