@@ -19,6 +19,8 @@ import {
 } from '@/components/ui/Form';
 import { Input } from '@/components/ui/Input';
 import { Link } from '@/components/ui/Link';
+import { SeparatorWithText } from '@/components/ui/Separator';
+import { SocialButtons } from '@/components/auth/SocialButtons';
 import { signIn } from '@/actions/auth/signIn';
 import { signInFormSchema, type SignInFormValues } from '@/schemas/auth';
 
@@ -89,7 +91,7 @@ export const LoginForm = () => {
             </Alert>
           )}
         </CardContent>
-        <CardFooter className='flex-col items-start gap-4'>
+        <CardFooter className='flex-col items-stretch gap-4'>
           <Button
             type='submit'
             variant='primary'
@@ -98,6 +100,8 @@ export const LoginForm = () => {
           >
             Sign in
           </Button>
+          <SeparatorWithText>Or sign in with</SeparatorWithText>
+          <SocialButtons />
           <div className='text-sm text-muted-foreground'>
             Don&apos;t have an account? <Link href='/sign-up'>Sign up</Link>
           </div>
