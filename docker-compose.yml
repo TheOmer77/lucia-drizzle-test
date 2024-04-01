@@ -13,6 +13,8 @@ services:
       - .:/app
       - /app/node_modules
     environment:
+      - AUTH_GITHUB_CLIENT_ID=${AUTH_GITHUB_CLIENT_ID:?error}
+      - AUTH_GITHUB_CLIENT_SECRET=${AUTH_GITHUB_CLIENT_SECRET:?error}
       - DB_URL=${DB_URL:-postgres://postgres:postgres@db:5432/postgres}
       - MAIL_HOST=${MAIL_HOST:?error}
       - MAIL_PORT=${MAIL_PORT:?error}

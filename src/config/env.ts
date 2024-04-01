@@ -3,6 +3,8 @@ import { z } from 'zod';
 
 export const env = createEnv({
   server: {
+    AUTH_GITHUB_CLIENT_ID: z.string(),
+    AUTH_GITHUB_CLIENT_SECRET: z.string(),
     DB_URL: z.string().url(),
     MAIL_HOST: z.string(),
     MAIL_PASSWORD: z.string(),
@@ -21,6 +23,8 @@ export const env = createEnv({
       .default('development'),
   },
   runtimeEnv: {
+    AUTH_GITHUB_CLIENT_ID: process.env.AUTH_GITHUB_CLIENT_ID,
+    AUTH_GITHUB_CLIENT_SECRET: process.env.AUTH_GITHUB_CLIENT_SECRET,
     DB_URL: process.env.DB_URL,
     MAIL_HOST: process.env.MAIL_HOST,
     MAIL_PASSWORD: process.env.MAIL_PASSWORD,
