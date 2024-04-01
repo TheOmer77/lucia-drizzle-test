@@ -1,7 +1,7 @@
 import type { PropsWithChildren } from 'react';
 import { redirect } from 'next/navigation';
 
-import { validateRequest } from '@/lib/auth';
+import { validateRequest } from '@/lib/auth/lucia';
 
 const AuthLoggedOutLayout = async ({ children }: PropsWithChildren) => {
   const { user } = await validateRequest();

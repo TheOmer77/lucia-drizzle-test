@@ -4,15 +4,14 @@ import { eq } from 'drizzle-orm';
 
 import { verifyFormSchema } from '@/schemas/auth';
 import { db } from '@/db';
-import { emailVerification, user, type User } from '@/db/schema';
+import { emailVerification, user } from '@/db/schema';
+import { lucia, validateRequest } from '@/lib/auth/lucia';
 import {
   createUserSession,
   createVerificationCode,
-  lucia,
   sendVerificationEmail,
-  validateRequest,
   verifyVerificationCode,
-} from '@/lib/auth';
+} from '@/lib/auth/utils';
 
 export const verifyEmailVerification = async (
   code: string

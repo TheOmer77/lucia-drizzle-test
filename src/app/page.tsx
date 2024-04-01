@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { signOut } from '@/actions/auth/signOut';
-import { validateRequest } from '@/lib/auth';
+import { validateRequest } from '@/lib/auth/lucia';
 
 const Home = async () => {
   const { user } = await validateRequest();

@@ -6,7 +6,7 @@ import { eq } from 'drizzle-orm';
 import { db } from '@/db';
 import { user, type User } from '@/db/schema';
 import { signInFormSchema, type SignInFormValues } from '@/schemas/auth';
-import { createUserSession } from '@/lib/auth';
+import { createUserSession } from '@/lib/auth/utils';
 
 export const signIn = async (
   values: SignInFormValues

@@ -4,7 +4,7 @@ import { VerifyForm } from './form';
 import { AuthPageTitle } from '../AuthPageTitle';
 import { AuthPageDescription } from '../AuthPageDescription';
 import { CardHeader } from '@/components/ui/Card';
-import { validateRequest } from '@/lib/auth';
+import { validateRequest } from '@/lib/auth/lucia';
 
 const VerifyPage = async () => {
   const { user } = await validateRequest();

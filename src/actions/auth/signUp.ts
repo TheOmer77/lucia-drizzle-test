@@ -10,7 +10,7 @@ import {
   createUserSession,
   createVerificationCode,
   sendVerificationEmail,
-} from '@/lib/auth';
+} from '@/lib/auth/utils';
 
 export const signUp = async (
   values: SignUpFormValues

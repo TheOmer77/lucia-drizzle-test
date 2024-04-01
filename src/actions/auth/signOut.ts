@@ -2,7 +2,7 @@
 
 import { cookies } from 'next/headers';
 
-import { lucia, validateRequest } from '@/lib/auth';
+import { lucia, validateRequest } from '@/lib/auth/lucia';
 
 export const signOut = async (): Promise<
   { success: true } | { success: false; error: string }

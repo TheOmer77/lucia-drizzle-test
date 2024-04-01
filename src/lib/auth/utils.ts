@@ -1,69 +1,14 @@
-import { cache } from 'react';
 import { cookies } from 'next/headers';
-import { Lucia } from 'lucia';
-import { DrizzlePostgreSQLAdapter } from '@lucia-auth/adapter-drizzle';
 import { TimeSpan, createDate, isWithinExpirationDate } from 'oslo';
 import { alphabet, generateRandomString } from 'oslo/crypto';
 import { eq } from 'drizzle-orm';
 import { render } from '@react-email/render';
 
-import { sendEmail } from './email';
+import { lucia } from './lucia';
+import { sendEmail } from '../email';
 import { db } from '@/db';
-import { emailVerification, session, user } from '@/db/schema';
+import { emailVerification } from '@/db/schema';
 import VerifyEmail from '@/emails/verify';
-import { env } from '@/config/env';
-
-const adapter = new DrizzlePostgreSQLAdapter(db, session, user);
-
-export const lucia = new Lucia(adapter, {
-  sessionCookie: {
-    /** This sets cookies with super long expiration, since Next.js doesn't
-     * allow Lucia to extend cookie expiration when rendering pages */
-    expires: false,
-    attributes: { secure: env.NODE_ENV === 'production' },
-  },
-  getUserAttributes: attributes => ({
-    email: attributes.email,
-    emailVerified: attributes.emailVerified,
-  }),
-});
-
-declare module 'lucia' {
-  interface Register {
-    Lucia: typeof lucia;
-    DatabaseUserAttributes: {
-      email: string;
-      emailVerified: boolean;
-    };
-  }
-}
-
-export const validateRequest = cache(async () => {
-  const sessionId = cookies().get(lucia.sessionCookieName)?.value ?? null;
-  if (!sessionId) return { user: null, session: null };
-  const { user, session } = await lucia.validateSession(sessionId);
-  try {
-    if (session && session.fresh) {
-      const sessionCookie = lucia.createSessionCookie(session.id);
-      cookies().set(
-        sessionCookie.name,
-        sessionCookie.value,
-        sessionCookie.attributes
-      );
-    }
-    if (!session) {
-      const sessionCookie = lucia.createBlankSessionCookie();
-      cookies().set(
-        sessionCookie.name,
-        sessionCookie.value,
-        sessionCookie.attributes
-      );
-    }
-  } catch {
-    // Next.js throws error when attempting to set cookies when rendering page
-  }
-  return { user, session };
-});
 
 export const createUserSession = async (userId: string) => {
   const session = await lucia.createSession(userId, {
