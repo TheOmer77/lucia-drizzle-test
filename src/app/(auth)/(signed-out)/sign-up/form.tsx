@@ -51,6 +51,12 @@ export const SignupForm = () => {
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <CardContent className='space-y-4'>
+          {error && (
+            <Alert variant='destructive'>
+              <OctagonAlertIcon />
+              {error}
+            </Alert>
+          )}
           <FormField
             control={form.control}
             name='email'
@@ -77,12 +83,6 @@ export const SignupForm = () => {
               </FormItem>
             )}
           />
-          {error && (
-            <Alert variant='destructive'>
-              <OctagonAlertIcon />
-              {error}
-            </Alert>
-          )}
         </CardContent>
         <CardFooter className='flex-col items-start gap-4'>
           <Button

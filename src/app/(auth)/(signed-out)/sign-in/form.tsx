@@ -54,6 +54,12 @@ export const LoginForm = () => {
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <CardContent className='space-y-4'>
+          {error && (
+            <Alert variant='destructive'>
+              <OctagonAlertIcon />
+              {error}
+            </Alert>
+          )}
           <FormField
             control={form.control}
             name='email'
@@ -93,12 +99,6 @@ export const LoginForm = () => {
               </FormItem>
             )}
           />
-          {error && (
-            <Alert variant='destructive'>
-              <OctagonAlertIcon />
-              {error}
-            </Alert>
-          )}
         </CardContent>
         <CardFooter className='flex-col items-stretch gap-4'>
           <Button
