@@ -31,7 +31,7 @@ export const createVerificationCode = async (
   if (isResend) {
     await db
       .update(emailVerification)
-      .set({ code, expiresAt, updatedAt: new Date() })
+      .set({ code, expiresAt })
       .where(eq(emailVerification.userId, userId));
     return code;
   }

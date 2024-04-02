@@ -21,7 +21,7 @@ export const oauthAccount = pgTable(
     updatedAt: timestamp('updated_at')
       .notNull()
       .defaultNow()
-      .$onUpdateFn(() => new Date()),
+      .$onUpdate(() => new Date()),
   },
   table => ({
     pk: primaryKey({ columns: [table.providerId, table.providerUserId] }),
