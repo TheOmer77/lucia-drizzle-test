@@ -25,7 +25,8 @@ import { signIn } from '@/actions/auth/signIn';
 import { signInFormSchema, type SignInFormValues } from '@/schemas/auth';
 
 export const LoginForm = () => {
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null),
+    [disabled, setDisabled] = useState(false);
   const [isPending, startTransition] = useTransition();
 
   const form = useForm<SignInFormValues>({
@@ -60,7 +61,11 @@ export const LoginForm = () => {
               <FormItem>
                 <FormLabel>Email</FormLabel>
                 <FormControl>
-                  <Input {...field} type='email' />
+                  <Input
+                    {...field}
+                    type='email'
+                    disabled={disabled || isPending}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -78,7 +83,11 @@ export const LoginForm = () => {
                   </Link>
                 </div>
                 <FormControl>
-                  <Input {...field} type='password' />
+                  <Input
+                    {...field}
+                    type='password'
+                    disabled={disabled || isPending}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -95,13 +104,17 @@ export const LoginForm = () => {
           <Button
             type='submit'
             variant='primary'
-            disabled={isPending}
+            disabled={disabled || isPending}
             className='w-full'
           >
             Sign in
           </Button>
           <SeparatorWithText>Or sign in with</SeparatorWithText>
-          <SocialButtons />
+          <SocialButtons
+            disabled={isPending}
+            onError={setError}
+            onPendingChange={setDisabled}
+          />
           <div className='text-sm text-muted-foreground'>
             Don&apos;t have an account? <Link href='/sign-up'>Sign up</Link>
           </div>
