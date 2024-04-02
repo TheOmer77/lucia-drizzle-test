@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useTransition } from 'react';
-import { redirect } from 'next/navigation';
+import { redirect, useSearchParams } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { OctagonAlertIcon } from 'lucide-react';
@@ -24,10 +24,35 @@ import { SocialButtons } from '@/components/auth/SocialButtons';
 import { signIn } from '@/actions/auth/signIn';
 import { signInFormSchema, type SignInFormValues } from '@/schemas/auth';
 
+// TODO: Move into constants
+const providerNames = { google: 'Google', github: 'GitHub' } as const;
+const urlErrors = {
+  OAUTH_ACCOUNT_NO_EMAIL:
+    "Your %s account doesn't have a primary email address.",
+  OAUTH_ACCOUNT_EMAIL_UNVERIFIED:
+    "Your %s account's primary email address isn't verified.",
+  OAUTH_ACCOUNT_NOT_LINKED:
+    "A user with this email already exists, and isn't linked to this %s account.",
+  SIGNIN_FAILED: 'Something went wrong while trying to sign you in.',
+} as const;
+
 export const LoginForm = () => {
   const [error, setError] = useState<string | null>(null),
     [disabled, setDisabled] = useState(false);
   const [isPending, startTransition] = useTransition();
+  const searchParams = useSearchParams();
+
+  const urlErrorCode = searchParams.get('error'),
+    urlErrorProvider = searchParams.get('provider');
+  const urlError =
+    (urlErrorCode &&
+      urlErrorProvider &&
+      Object.keys(providerNames).includes(urlErrorProvider) &&
+      urlErrors?.[urlErrorCode as keyof typeof urlErrors]?.replace(
+        '%s',
+        providerNames?.[urlErrorProvider as keyof typeof providerNames]
+      )) ||
+    null;
 
   const form = useForm<SignInFormValues>({
     resolver: zodResolver(signInFormSchema),
@@ -54,10 +79,10 @@ export const LoginForm = () => {
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <CardContent className='space-y-4'>
-          {error && (
+          {(error || urlError) && (
             <Alert variant='destructive'>
               <OctagonAlertIcon />
-              {error}
+              {error || urlError}
             </Alert>
           )}
           <FormField

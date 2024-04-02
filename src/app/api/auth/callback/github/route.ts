@@ -1,6 +1,5 @@
 import { cookies } from 'next/headers';
 import { and, eq } from 'drizzle-orm';
-import { OAuth2RequestError } from 'arctic';
 
 import { github } from '@/lib/auth/oauth';
 import { db } from '@/db';
@@ -17,6 +16,12 @@ type GitHubEmail = {
   verified: boolean;
   visibility: 'private' | 'public' | null;
 };
+
+const providerId = 'github';
+const redirectWithError = (errorCode: string, req: Request) =>
+  Response.redirect(
+    new URL(`/sign-in?error=${errorCode}&provider=${providerId}`, req.url)
+  );
 
 export const GET = async (req: Request) => {
   const url = new URL(req.url),
@@ -39,7 +44,7 @@ export const GET = async (req: Request) => {
       .from(oauthAccount)
       .where(
         and(
-          eq(oauthAccount.providerId, 'github'),
+          eq(oauthAccount.providerId, providerId),
           eq(oauthAccount.providerUserId, githubUser.id)
         )
       );
@@ -57,37 +62,15 @@ export const GET = async (req: Request) => {
       }),
       emails: GitHubEmail[] = await emailRes.json(),
       primaryEmail = emails?.find(email => email.primary) ?? null;
-    if (!primaryEmail)
-      return Response.json(
-        {
-          success: false,
-          message: "Your GitHub user doesn't have a primary email address.",
-        },
-        { status: 400 }
-      );
+    if (!primaryEmail) return redirectWithError('OAUTH_ACCOUNT_NO_EMAIL', req);
     if (!primaryEmail.verified)
-      return Response.json(
-        {
-          success: false,
-          message: "Your GitHub user's primary email address isn't verified.",
-        },
-        { status: 400 }
-      );
+      return redirectWithError('OAUTH_ACCOUNT_EMAIL_UNVERIFIED', req);
+
     const [existingUser] = await db
       .select()
       .from(user)
       .where(eq(user.email, primaryEmail.email));
-
-    if (existingUser)
-      // TODO: Redirect to login page with error=OAUTH_ACCOUNT_NOT_LINKED & provider=github
-      return Response.json(
-        {
-          success: false,
-          message:
-            "A user with this email already exists, and isn't linked to this GitHub account.",
-        },
-        { status: 400 }
-      );
+    if (existingUser) return redirectWithError('OAUTH_ACCOUNT_NOT_LINKED', req);
 
     // No existing account, create a new one
     const newUser = await db.transaction(async tx => {
@@ -110,18 +93,7 @@ export const GET = async (req: Request) => {
         Location: '/',
       },
     });
-  } catch (error) {
-    if (error instanceof OAuth2RequestError)
-      return Response.json(
-        { success: false, message: 'Invalid code.' },
-        { status: 400 }
-      );
-    return Response.json(
-      {
-        success: false,
-        message: 'Something went wrong while trying to sign you in.',
-      },
-      { status: 500 }
-    );
+  } catch {
+    return redirectWithError('SIGNIN_FAILED', req);
   }
 };
